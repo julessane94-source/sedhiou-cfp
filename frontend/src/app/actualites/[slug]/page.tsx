@@ -19,12 +19,12 @@ export default async function ActualiteDetailPage({ params }: { params: { slug: 
   const act = await getActualite(params.slug)
   if (!act) notFound()
   return (
-    <div className="pt-32 pb-20 px-4 max-w-4xl mx-auto">
-      <Link href="/actualites" className="text-bordeaux-300 hover:underline inline-block mb-4">&larr; Retour</Link>
-      <h1 className="text-4xl font-bold mt-4">{act.title}</h1>
-      <p className="text-gray-300">{new Date(act.publishedAt).toLocaleDateString()}</p>
-      {act.coverImage && <img src={act.coverImage} className="my-6 rounded-lg" />}
-      <div className="prose prose-invert"><PortableText value={act.body} /></div>
+    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-bordeaux-50 to-white max-w-4xl mx-auto">
+      <Link href="/actualites" className="text-bordeaux-600 hover:underline">← Retour</Link>
+      <h1 className="text-4xl font-bold mt-4 text-bordeaux-800">{act.title}</h1>
+      <p className="text-gray-500">{new Date(act.publishedAt).toLocaleDateString()}</p>
+      {act.coverImage && <img src={act.coverImage} className="my-6 rounded" />}
+      <PortableText value={act.body} />
     </div>
   )
 }

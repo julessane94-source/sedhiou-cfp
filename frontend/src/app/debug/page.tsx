@@ -7,6 +7,7 @@ export default async function DebugPage() {
     const formations = await client.fetch('*[_type == "formation"]{title}')
     return <pre>{JSON.stringify(formations, null, 2)}</pre>
   } catch (err) {
-    return <div>Erreur : {err.message}</div>
+    const error = err as Error
+    return <div>Erreur : {error.message}</div>
   }
 }

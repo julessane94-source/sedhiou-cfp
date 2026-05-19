@@ -27,26 +27,26 @@ export default async function AProposPage() {
   const data = await getAPropos()
   if (!data) return <div className="pt-32 text-center">Chargement...</div>
   return (
-    <div className="pt-32 pb-20 px-4 min-h-screen">
+    <div className="pt-32 pb-20 px-4 min-h-screen bg-gradient-to-br from-bordeaux-50 to-white">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-5xl font-bold text-center mb-6 text-white">{data.heroTitle}</h1>
-        <p className="text-center text-gray-200 mb-12">{data.heroSubtitle}</p>
+        <h1 className="text-5xl font-bold text-center mb-6 text-bordeaux-800">{data.heroTitle}</h1>
+        <p className="text-center text-gray-600 mb-12">{data.heroSubtitle}</p>
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="card-glass p-6"><h2 className="text-2xl font-bold mb-4 text-white">Mission</h2><PortableText value={data.mission} /></div>
-          <div className="card-glass p-6"><h2 className="text-2xl font-bold mb-4 text-white">Vision</h2><PortableText value={data.vision} /></div>
+          <div className="bg-white p-6 rounded shadow"><h2 className="text-2xl font-bold mb-4 text-bordeaux-800">Mission</h2><PortableText value={data.mission} /></div>
+          <div className="bg-white p-6 rounded shadow"><h2 className="text-2xl font-bold mb-4 text-bordeaux-800">Vision</h2><PortableText value={data.vision} /></div>
         </div>
         {data.stats && data.stats.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {data.stats.map((stat: Stat, idx: number) => (
-              <div key={idx} className="card-glass p-4 text-center">
-                <div className="text-3xl font-bold text-bordeaux-300">{stat.value}</div>
-                <div className="text-gray-200 text-sm">{stat.label}</div>
+              <div key={idx} className="bg-white p-4 text-center rounded shadow">
+                <div className="text-3xl font-bold text-bordeaux-700">{stat.value}</div>
+                <div className="text-gray-600 text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
         )}
         <div className="text-center">
-          <Link href={data.ctaLink || '/inscription'} className="btn-modern btn-primary">
+          <Link href={data.ctaLink || '/inscription'} className="bg-bordeaux-700 text-white px-6 py-3 rounded-full inline-block hover:bg-bordeaux-800 transition">
             {data.ctaTitle || 'Rejoignez-nous'}
           </Link>
         </div>
