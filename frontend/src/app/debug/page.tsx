@@ -9,7 +9,7 @@ export default async function DebugPage() {
     const query = '*[_type == "formation"]{title, _id, description}'
     formations = await client.fetch(query)
   } catch (err) {
-    error = err.message
+    error = err instanceof Error ? err.message : String(err)
   }
   return (
     <div className="p-8">
