@@ -1,4 +1,4 @@
-﻿import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
@@ -9,22 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        green: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          DEFAULT: '#22c55e',
+        bordeaux: {
+          50: '#fdf2f2',
+          100: '#f8e0e0',
+          200: '#f0c6c6',
+          300: '#e29e9e',
+          400: '#cf6e6e',
+          500: '#b83b3b',  // bordeaux principal
+          600: '#9a2e2e',
+          700: '#7a2424',
+          800: '#5e1b1b',
+          900: '#461414',
+          DEFAULT: '#8B1E1E',
         },
-        primary: '#16a34a',    // vert principal
-        secondary: '#86efac',   // vert clair
-        accent: '#14532d',      // vert foncé
+        brown: {
+          50: '#fdf8f2',
+          100: '#f6ede3',
+          200: '#ecd9c7',
+          300: '#e0c0a3',
+          400: '#d1a27c',
+          500: '#b8824f',
+          600: '#9e6940',
+          700: '#7e4f2e',
+          800: '#633c22',
+          900: '#4a2d18',
+          DEFAULT: '#6B3A1F',
+        },
+        primary: '#8B1E1E',   // bordeaux
+        secondary: '#6B3A1F', // marron
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

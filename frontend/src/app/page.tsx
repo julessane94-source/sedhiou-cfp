@@ -26,11 +26,11 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-green-900 to-green-800 text-white">
-        <div className="relative z-10 text-center px-4">
+      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-bordeaux-900 to-bordeaux-800 text-white">
+        <div className="relative z-10 text-center px-4 animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-4">{data?.heroTitle || 'CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-600 transition">
+          <Link href="/formations" className="btn-modern btn-primary inline-flex items-center gap-2">
             Découvrir nos formations <ArrowRight size={18} />
           </Link>
         </div>
