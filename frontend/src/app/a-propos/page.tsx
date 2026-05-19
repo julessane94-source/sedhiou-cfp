@@ -35,8 +35,8 @@ export default async function AProposPage() {
   if (!data) {
     return (
       <div className="pt-32 pb-20 px-4 text-center">
-        <h1 className="text-4xl font-bold">À propos</h1>
-        <p className="text-gray-600 mt-4">Chargement des données...</p>
+        <h1 className="text-4xl font-bold">Ã€ propos</h1>
+        <p className="text-gray-600 mt-4">Chargement des donnÃ©es...</p>
       </div>
     )
   }
@@ -45,7 +45,7 @@ export default async function AProposPage() {
     <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 to-white">
       <div className="container mx-auto max-w-5xl">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold text-green-800 mb-4">{data.heroTitle || 'À propos du CFP SEDHIOU'}</h1>
+          <h1 className="text-5xl font-extrabold text-green-800 mb-4">{data.heroTitle || 'Ã€ propos du CFP SEDHIOU'}</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">{data.heroSubtitle}</p>
         </div>
 
@@ -88,7 +88,7 @@ export default async function AProposPage() {
 
         {data.team && data.team.length > 0 && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-12">Notre équipe</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Notre Ã©quipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
               {data.team.map((member: TeamMember, i: number) => (
                 <div key={i} className="card-glass text-center p-6">
@@ -96,7 +96,7 @@ export default async function AProposPage() {
                     {member.image?.asset?.url ? (
                       <img src={member.image.asset.url} alt={member.name} className="w-full h-full object-cover" />
                     ) : (
-                      '👤'
+                      'ðŸ‘¤'
                     )}
                   </div>
                   <h3 className="font-bold text-lg">{member.name}</h3>

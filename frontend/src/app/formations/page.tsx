@@ -42,7 +42,7 @@ export default async function FormationsPage() {
           Nos Formations
         </h1>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-16">
-          Des parcours d'excellence pour vous préparer aux métiers de demain
+          Des parcours d'excellence pour vous prÃ©parer aux mÃ©tiers de demain
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {formations.map((formation: any, index: number) => (

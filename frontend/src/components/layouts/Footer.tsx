@@ -25,7 +25,7 @@ export default async function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           <div>
             <h3 className="text-xl font-bold text-white mb-3">CFP SEDHIOU</h3>
-            <p className="text-sm">Centre de Formation Professionnelle de Sédhiou – Excellence et insertion.</p>
+            <p className="text-sm">Centre de Formation Professionnelle de SÃ©dhiou â€“ Excellence et insertion.</p>
           </div>
           <div>
             <h4 className="font-semibold text-white mb-2">Liens rapides</h4>
@@ -57,7 +57,7 @@ export default async function Footer() {
           </div>
         </div>
         <div className="border-t border-green-800 mt-6 pt-4 text-center text-sm">
-          &copy; {new Date().getFullYear()} CFP SEDHIOU – Tous droits réservés
+          &copy; {new Date().getFullYear()} CFP SEDHIOU â€“ Tous droits rÃ©servÃ©s
         </div>
       </div>
     </footer>

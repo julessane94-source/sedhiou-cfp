@@ -47,31 +47,31 @@ export default async function ContactPage() {
 
         <div className="grid md:grid-cols-2 gap-10">
           <div className="card-glass p-8">
-            <h2 className="text-2xl font-bold text-green-800 mb-6">Nos coordonnées</h2>
+            <h2 className="text-2xl font-bold text-green-800 mb-6">Nos coordonnÃ©es</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-xl">📍</span>
+                <span className="text-xl">ðŸ“</span>
                 <div>
                   <p className="font-semibold">Adresse</p>
                   <p className="text-gray-600">{contact.address}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">📞</span>
+                <span className="text-xl">ðŸ“ž</span>
                 <div>
-                  <p className="font-semibold">Téléphone</p>
+                  <p className="font-semibold">TÃ©lÃ©phone</p>
                   <p className="text-gray-600">{contact.phone}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">✉️</span>
+                <span className="text-xl">âœ‰ï¸</span>
                 <div>
                   <p className="font-semibold">Email</p>
                   <p className="text-gray-600">{contact.email}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">🕒</span>
+                <span className="text-xl">ðŸ•’</span>
                 <div>
                   <p className="font-semibold">Horaires</p>
                   <p className="text-gray-600 whitespace-pre-line">{contact.hours}</p>
@@ -88,7 +88,7 @@ export default async function ContactPage() {
 
         {contact.mapEmbedUrl && (
           <div className="mt-12 card-glass p-4">
-            <h3 className="font-semibold mb-2">Où nous trouver</h3>
+            <h3 className="font-semibold mb-2">OÃ¹ nous trouver</h3>
             <div className="w-full h-64 rounded overflow-hidden">
               <iframe
                 src={toEmbedMap(contact.mapEmbedUrl)}

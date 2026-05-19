@@ -9,9 +9,9 @@ import { client } from '@/lib/sanity/client'
 const NAV = [
   { href: '/', label: 'Accueil' },
   { href: '/formations', label: 'Formations' },
-  { href: '/actualites', label: 'Actualités' },
+  { href: '/actualites', label: 'ActualitÃ©s' },
   { href: '/appels-candidatures', label: 'Appels' },
-  { href: '/a-propos', label: 'À propos' },
+  { href: '/a-propos', label: 'Ã€ propos' },
   { href: '/contact', label: 'Contact' }
 ]
 

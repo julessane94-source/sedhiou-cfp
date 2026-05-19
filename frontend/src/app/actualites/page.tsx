@@ -35,10 +35,10 @@ export default async function ActualitesPage() {
     <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 via-white to-green-50">
       <div className="container mx-auto">
         <h1 className="text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent mb-12">
-          Actualités
+          ActualitÃ©s
         </h1>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-16 animate-fade-in">
-          Toute l'actualité du CFP SEDHIOU
+          Toute l'actualitÃ© du CFP SEDHIOU
         </p>
         <div className="space-y-8">
           {actualites.map((act: Actualite, index: number) => (
