@@ -25,9 +25,9 @@ export default async function ContactPage() {
         <p className="text-center text-gray-600 mb-12">{contact?.subtitle}</p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Coordonnées</h2>
+            <h2 className="text-2xl font-bold mb-4">CoordonnÃ©es</h2>
             <p><strong>Adresse :</strong> {contact?.address}</p>
-            <p><strong>Tél :</strong> {contact?.phone}</p>
+            <p><strong>TÃ©l :</strong> {contact?.phone}</p>
             <p><strong>Email :</strong> {contact?.email}</p>
             <p><strong>Horaires :</strong> {contact?.hours}</p>
           </div>
