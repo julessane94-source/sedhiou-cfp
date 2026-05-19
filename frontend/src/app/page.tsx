@@ -1,7 +1,6 @@
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -12,6 +11,7 @@ async function getAccueil() {
       heroTitle,
       heroSubtitle,
       videoUrl,
+      heroImage,
       contentBlocks
     }`
     return await client.fetch(query)
@@ -21,17 +21,17 @@ async function getAccueil() {
   }
 }
 
-export default async function Home() {
+export default async function HomePage() {
   const data = await getAccueil()
 
   return (
     <div>
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-bordeaux-900 to-bordeaux-800 text-white">
-        <div className="relative z-10 text-center px-4 animate-fade-in-up">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4">{data?.heroTitle || 'CFP SEDHIOU'}</h1>
+      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-red-900 to-red-800 text-white">
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-4">{data?.heroTitle || 'Bienvenue au CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="btn-modern btn-primary inline-flex items-center gap-2">
-            Découvrir nos formations <ArrowRight size={18} />
+          <Link href="/formations" className="inline-block bg-white text-red-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+            Nos formations
           </Link>
         </div>
       </section>
