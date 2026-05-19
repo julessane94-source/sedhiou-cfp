@@ -48,7 +48,7 @@ export default async function FormationsPage() {
                 <span className="flex items-center gap-1"><Clock size={14} /> {f.duration || '3 ans'}</span>
                 <span className="flex items-center gap-1"><Calendar size={14} /> {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black">DÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©couvrir</Link>
+              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black">DÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©couvrir</Link>
             </div>
           ))}
         </div>
