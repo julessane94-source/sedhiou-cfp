@@ -56,5 +56,5 @@ export default async function FormationsPage() {
         </div>
       </div>
     </div>
-  )
+  , { cache: "no-store" })
 }
