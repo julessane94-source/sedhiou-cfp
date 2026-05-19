@@ -7,7 +7,7 @@
     @apply bg-gradient-to-br from-bordeaux-900 to-bordeaux-800 text-white;
     font-family: 'Inter', system-ui, sans-serif;
   }
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     @apply font-bold text-white;
   }
   a {
