@@ -32,3 +32,10 @@
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Boutons modernes avec texte noir et fond blanc/clair */
+.btn-modern-black {
+  @apply bg-white text-gray-900 font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 inline-block text-center;
+}
+.btn-outline-dark {
+  @apply border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-all duration-300;
+}
