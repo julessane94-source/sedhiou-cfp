@@ -46,7 +46,7 @@ export default async function AProposPage() {
           </div>
         )}
         <div className="text-center">
-          <Link href={data.ctaLink || '/inscription'} className="inline-block bg-white text-bordeaux-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1">🔗 {data.ctaTitle || 'Rejoignez-nous'}</Link>
+          <Link href={data.ctaLink || '/inscription'} className="inline-block bg-white text-bordeaux-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1">{data.ctaTitle || 'Rejoignez-nous'}</Link>
         </div>
       </div>
     </div>
