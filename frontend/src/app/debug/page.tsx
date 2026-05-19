@@ -13,7 +13,8 @@ export default async function DebugPage() {
         <pre>{JSON.stringify(formations, null, 2)}</pre>
       </div>
     )
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error
     return <div>Erreur : {error.message}</div>
   }
 }
