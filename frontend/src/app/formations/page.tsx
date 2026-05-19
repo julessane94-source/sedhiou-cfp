@@ -48,7 +48,7 @@ export default async function FormationsPage() {
                 <span className="flex items-center gap-1"><Clock size={14} /> {f.duration || '3 ans'}</span>
                 <span className="flex items-center gap-1"><Calendar size={14} /> {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${f.slug || f._id}`} className="inline-block bg-white text-bordeaux-800 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Découvrir</Link>
+              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black">DÃƒÂ©couvrir</Link>
             </div>
           ))}
         </div>

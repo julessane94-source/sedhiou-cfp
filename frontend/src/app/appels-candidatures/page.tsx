@@ -33,7 +33,7 @@ export default async function AppelsPage() {
   return (
     <div className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-4 animate-fade-in">Appels à candidatures</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-4 animate-fade-in">Appels ÃƒÂ  candidatures</h1>
         <div className="grid md:grid-cols-2 gap-8">
           {appels.map((a, i) => {
             const isOpen = a.status === 'open' && new Date(a.deadline) > now
@@ -41,9 +41,9 @@ export default async function AppelsPage() {
               <div key={a._id} className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg border border-white/20 p-6 transition-all duration-300 hover:-translate-y-1 animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
                 <h2 className="text-2xl font-bold text-white mb-2">{a.title}</h2>
                 <p className="text-gray-200 mb-4">{a.description}</p>
-                <p className="text-gray-300 text-sm mb-2">📅 {new Date(a.deadline).toLocaleDateString()}</p>
-                <p className={`font-semibold ${isOpen ? 'text-green-400' : 'text-red-400'}`}>{isOpen ? '✅ Ouvert' : '❌ Clos'}</p>
-                {isOpen && <Link href={`/appels-candidatures/${a.slug}`} className="inline-block mt-4 bg-white text-bordeaux-800 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Postuler</Link>}
+                <p className="text-gray-300 text-sm mb-2">Ã°Å¸â€œâ€¦ {new Date(a.deadline).toLocaleDateString()}</p>
+                <p className={`font-semibold ${isOpen ? 'text-green-400' : 'text-red-400'}`}>{isOpen ? 'Ã¢Å“â€¦ Ouvert' : 'Ã¢ÂÅ’ Clos'}</p>
+                {isOpen && <Link href={`/appels-candidatures/${a.slug}`} className="inline-block mt-4 bg-white text-bordeaux-800 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Postuler maintenant</Link>}
               </div>
             )
           })}
