@@ -1,8 +1,10 @@
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 async function getAccueil() {
   try {
@@ -21,13 +23,16 @@ async function getAccueil() {
 
 export default async function Home() {
   const data = await getAccueil()
+
   return (
     <div>
       <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-green-900 to-green-800 text-white">
         <div className="relative z-10 text-center px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-4">{data?.heroTitle || 'CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="bg-green-500 text-white px-6 py-3 rounded-full">Découvrir</Link>
+          <Link href="/formations" className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-600 transition">
+            Découvrir nos formations <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
       <div className="container mx-auto px-4 py-16 max-w-4xl">
