@@ -7,5 +7,4 @@ export const client = createClient({
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
   perspective: 'drafts',
-  next: { revalidate: 0 },
 })
