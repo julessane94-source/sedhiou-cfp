@@ -1,0 +1,14 @@
+{
+  "name": "cfp-sedhiou-cms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "^5.25.1",
+    "sanity": "^5.25.1"
+  }
+}
