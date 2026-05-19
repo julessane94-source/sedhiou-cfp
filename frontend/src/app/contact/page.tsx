@@ -1,4 +1,4 @@
-﻿import { client } from '@/lib/sanity/client'
+import { client } from '@/lib/sanity/client'
 import ContactForm from './ContactForm'
 
 export const dynamic = 'force-dynamic'
@@ -46,33 +46,33 @@ export default async function ContactPage() {
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">{contact.subtitle}</p>
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Coordonnées */}
+          {/* Coordonn�es */}
           <div className="card-glass p-8">
-            <h2 className="text-2xl font-bold text-green-800 mb-6">Nos coordonnées</h2>
+            <h2 className="text-2xl font-bold text-green-800 mb-6">Nos coordonn�es</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-xl">📍</span>
+                <span className="text-xl">??</span>
                 <div>
                   <p className="font-semibold">Adresse</p>
                   <p className="text-gray-600">{contact.address}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">📞</span>
+                <span className="text-xl">??</span>
                 <div>
-                  <p className="font-semibold">Téléphone</p>
+                  <p className="font-semibold">T�l�phone</p>
                   <p className="text-gray-600">{contact.phone}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">✉️</span>
+                <span className="text-xl">??</span>
                 <div>
                   <p className="font-semibold">Email</p>
                   <p className="text-gray-600">{contact.email}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-xl">🕒</span>
+                <span className="text-xl">??</span>
                 <div>
                   <p className="font-semibold">Horaires</p>
                   <p className="text-gray-600 whitespace-pre-line">{contact.hours}</p>
@@ -91,7 +91,7 @@ export default async function ContactPage() {
         {/* Carte (optionnelle) */}
         {contact.mapEmbedUrl && (
           <div className="mt-12 card-glass p-4">
-            <h3 className="font-semibold mb-2">Où nous trouver</h3>
+            <h3 className="font-semibold mb-2">O� nous trouver</h3>
             <div className="w-full h-64 rounded overflow-hidden">
               <iframe
                 src={toEmbedMap(contact.mapEmbedUrl)}

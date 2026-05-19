@@ -1,17 +1,17 @@
-ï»¿ 'use client'
+ 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, PhoneIcon } from '@/components/ui/SocialIcons'
-import { client } from '@/lib/sanity.client'
+import { client } from '@/lib/sanity/client'
 
 const NAV = [
   { href: '/', label: 'Accueil' },
   { href: '/formations', label: 'Formations' },
-  { href: '/actualites', label: 'ActualitÃ©s' },
+  { href: '/actualites', label: 'Actualités' },
   { href: '/appels-candidatures', label: 'Appels' },
-  { href: '/a-propos', label: 'Ã€ propos' },
+  { href: '/a-propos', label: 'À propos' },
   { href: '/contact', label: 'Contact' }
 ]
 
