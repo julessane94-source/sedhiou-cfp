@@ -2,17 +2,9 @@ import { client } from '@/lib/sanity/client'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
-type Actualite = {
-  _id: string
-  title: string
-  excerpt: string
-  publishedAt: string
-  slug: string
-  coverImage: string | null
-}
-
-async function getActualites(): Promise<Actualite[]> {
+async function getActualites() {
   try {
     const query = `*[_type == "actualite"] | order(publishedAt desc) {
       _id,
@@ -31,28 +23,24 @@ async function getActualites(): Promise<Actualite[]> {
 
 export default async function ActualitesPage() {
   const actualites = await getActualites()
+  if (!actualites.length) {
+    return <div className="pt-32 pb-20 px-4 text-center"><h1 className="text-4xl font-bold">Actualités</h1><p>Aucune actualité</p></div>
+  }
   return (
-    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 via-white to-green-50">
+    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 to-white">
       <div className="container mx-auto">
-        <h1 className="text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent mb-12">
-          Actualités
-        </h1>
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-16 animate-fade-in">
-          Toute l'actualité du CFP SEDHIOU
-        </p>
+        <h1 className="text-5xl font-extrabold text-center mb-12">Actualités</h1>
         <div className="space-y-8">
-          {actualites.map((act: Actualite, index: number) => (
-            <article key={act._id} className="card-glass overflow-hidden md:flex animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="md:w-1/3 h-48 md:h-auto bg-gradient-to-br from-green-200 to-green-300 flex items-center justify-center">
-                {act.coverImage ? <img src={act.coverImage} className="w-full h-full object-cover" /> : '??'}
+          {actualites.map((act: any) => (
+            <article key={act._id} className="card-glass overflow-hidden md:flex">
+              <div className="md:w-1/3 h-48 md:h-auto flex items-center justify-center bg-gray-100">
+                {act.coverImage ? <img src={act.coverImage} className="w-full h-full object-cover" /> : '📰'}
               </div>
               <div className="p-6 md:w-2/3">
                 <p className="text-sm text-green-700 mb-1">{new Date(act.publishedAt).toLocaleDateString('fr-FR')}</p>
                 <h2 className="text-2xl font-bold mb-2">{act.title}</h2>
-                <p className="text-gray-600 mb-4">{act.excerpt || 'Cliquez pour lire la suite...'}</p>
-                <Link href={`/actualites/${act.slug || act._id}`} className="text-green-700 font-semibold hover:underline">
-                  Lire la suite ?
-                </Link>
+                <p className="text-gray-600 mb-4">{act.excerpt}</p>
+                <Link href={`/actualites/${act.slug}`} className="text-green-700 font-semibold">Lire la suite →</Link>
               </div>
             </article>
           ))}

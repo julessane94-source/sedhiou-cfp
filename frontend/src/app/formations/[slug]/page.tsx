@@ -19,6 +19,7 @@ async function getFormation(slug: string) {
     }`
     return await client.fetch(query, { slug })
   } catch (e) {
+    console.error(e)
     return null
   }
 }
@@ -27,9 +28,9 @@ export default async function FormationDetailPage({ params }: { params: { slug: 
   const formation = await getFormation(params.slug)
   if (!formation) notFound()
   return (
-    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 via-white to-green-50">
+    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 to-white">
       <div className="container mx-auto max-w-4xl">
-        <Link href="/formations" className="text-green-700 hover:underline mb-4 inline-block">&larr; Retour</Link>
+        <Link href="/formations" className="text-green-700 underline mb-4 inline-block">&larr; Retour</Link>
         <div className="card-glass p-8">
           <h1 className="text-4xl font-bold mb-4">{formation.title}</h1>
           {formation.imageUrl && <img src={formation.imageUrl} className="rounded-xl mb-6 w-full" />}
