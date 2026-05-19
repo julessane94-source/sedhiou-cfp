@@ -1,5 +1,4 @@
 import { client } from '@/lib/sanity/client'
-import { Facebook, Instagram, Linkedin, Twitter, MessageCircle } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,11 +36,11 @@ export default async function ContactPage() {
             <p><strong>Email :</strong> {contact?.email}</p>
             <p><strong>Horaires :</strong> {contact?.hours}</p>
             <div className="mt-4 flex space-x-4">
-              {contact?.facebookUrl && <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer"><Facebook size={24} className="text-bordeaux-700" /></a>}
-              {contact?.instagramUrl && <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer"><Instagram size={24} className="text-bordeaux-700" /></a>}
-              {contact?.linkedinUrl && <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer"><Linkedin size={24} className="text-bordeaux-700" /></a>}
-              {contact?.twitterUrl && <a href={contact.twitterUrl} target="_blank" rel="noopener noreferrer"><Twitter size={24} className="text-bordeaux-700" /></a>}
-              {contact?.whatsappNumber && <a href={`https://wa.me/${contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer"><MessageCircle size={24} className="text-bordeaux-700" /></a>}
+              {contact?.facebookUrl && <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer"><span className="text-2xl">📘</span></a>}
+              {contact?.instagramUrl && <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer"><span className="text-2xl">📷</span></a>}
+              {contact?.linkedinUrl && <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer"><span className="text-2xl">🔗</span></a>}
+              {contact?.twitterUrl && <a href={contact.twitterUrl} target="_blank" rel="noopener noreferrer"><span className="text-2xl">🐦</span></a>}
+              {contact?.whatsappNumber && <a href={`https://wa.me/${contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer"><span className="text-2xl">💬</span></a>}
             </div>
           </div>
           <div className="bg-white p-6 rounded shadow">
