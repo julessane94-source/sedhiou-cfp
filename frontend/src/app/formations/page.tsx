@@ -25,9 +25,16 @@ async function getFormations() {
 
 export default async function FormationsPage() {
   const formations = await getFormations()
+
   if (!formations || formations.length === 0) {
-    return <div className="pt-32 pb-20 px-4 text-center">Aucune formation disponible.</div>
+    return (
+      <div className="pt-32 pb-20 px-4 text-center">
+        <h1 className="text-4xl font-bold">Nos Formations</h1>
+        <p className="text-gray-600 mt-4">Aucune formation disponible pour le moment.</p>
+      </div>
+    )
   }
+
   return (
     <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 via-white to-green-50">
       <div className="container mx-auto">
@@ -37,24 +44,28 @@ export default async function FormationsPage() {
             <div key={formation._id} className="card-glass overflow-hidden group">
               <div className="h-56 overflow-hidden relative">
                 {formation.imageUrl ? (
-                  <img src={formation.imageUrl} alt={formation.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img src={formation.imageUrl} alt={formation.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center"><Award className="w-16 h-16 text-white/50" /></div>
+                  <div className="w-full h-full bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center">
+                    <Award className="w-16 h-16 text-white/50" />
+                  </div>
                 )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{formation.title}</h3>
-                <p className="text-gray-600 mb-4">{formation.description?.substring(0, 100)}...</p>
-                <div className="flex justify-between text-sm text-green-700 font-semibold mb-5">
-                  <span><Clock size={16} className="inline mr-1" />{formation.duration || '3 ans'}</span>
+                <p className="text-gray-600 mb-4 line-clamp-3">{formation.description}</p>
+                <div className="flex justify-between items-center text-sm text-green-700 font-semibold mb-5">
+                  <span className="flex items-center gap-1"><Clock size={16} /> {formation.duration || '3 ans'}</span>
                   <span>{formation.price || 'Sur devis'}</span>
                 </div>
-                <Link href={`/formations/${formation.slug || formation._id}`} className="btn-modern btn-primary w-full inline-block text-center">Explorer</Link>
+                <Link href={`/formations/${formation.slug || formation._id}`} className="btn-modern btn-primary w-full inline-block text-center">
+                  Explorer
+                </Link>
               </div>
             </div>
           ))}
         </div>
       </div>
     </div>
-  , { cache: "no-store" })
+  )
 }
