@@ -3,18 +3,9 @@ import Link from 'next/link'
 import { Clock, Award } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
-type Formation = {
-  _id: string
-  title: string
-  description: string
-  duration: string
-  price: string
-  slug: string
-  imageUrl: string | null
-}
-
-async function getFormations(): Promise<Formation[]> {
+async function getFormations() {
   try {
     const query = `*[_type == "formation"] | order(_createdAt desc) {
       _id,
@@ -34,17 +25,27 @@ async function getFormations(): Promise<Formation[]> {
 
 export default async function FormationsPage() {
   const formations = await getFormations()
+
+  if (!formations || formations.length === 0) {
+    return (
+      <div className="pt-32 pb-20 px-4 text-center">
+        <h1 className="text-4xl font-bold">Nos Formations</h1>
+        <p className="text-gray-600 mt-4">Aucune formation disponible pour le moment.</p>
+      </div>
+    )
+  }
+
   return (
-    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 to-white">
+    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-green-50 via-white to-green-50">
       <div className="container mx-auto">
         <h1 className="text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent mb-12">
           Nos Formations
         </h1>
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-16 animate-fade-in">
-          Des parcours d'excellence pour vous préparer aux métiers de demain
+        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-16">
+          Des parcours d'excellence pour vous prÃ©parer aux mÃ©tiers de demain
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {formations.map((formation: Formation, index: number) => (
+          {formations.map((formation: any, index: number) => (
             <div key={formation._id} className="card-glass overflow-hidden group animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
               <div className="h-56 overflow-hidden relative">
                 {formation.imageUrl ? (
@@ -56,7 +57,7 @@ export default async function FormationsPage() {
                 )}
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{formation.title}</h3>
+                <h3 className="text-xl font-bold mb-2">{formation.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-3">{formation.description}</p>
                 <div className="flex justify-between items-center text-sm text-green-700 font-semibold mb-5">
                   <span className="flex items-center gap-1"><Clock size={16} /> {formation.duration || '3 ans'}</span>
