@@ -20,7 +20,7 @@ async function getAPropos() {
     }`
     return await client.fetch(query)
   } catch (error) {
-    console.error("Erreur chargement à propos:", error)
+    console.error("Erreur chargement Ã  propos:", error)
     return null
   }
 }
@@ -39,7 +39,7 @@ export default async function AProposPage() {
         </div>
         {data.stats && data.stats.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {data.stats.map((s, i) => (
+            {data.stats.map((s: { value: string; label: string }, i: number) => (
               <div key={i} className="card-light text-center">
                 <div className="text-3xl font-bold text-amber-700">{s.value}</div>
                 <div className="text-stone-600 mt-2">{s.label}</div>
