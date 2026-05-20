@@ -20,11 +20,11 @@ export default function Header() {
         <ul className="hidden md:flex space-x-8 text-white font-medium">
           <li><Link href="/" className="hover:text-bordeaux-300 transition">Accueil</Link></li>
           <li><Link href="/formations" className="hover:text-bordeaux-300 transition">Formations</Link></li>
-          <li><Link href="/actualites" className="hover:text-bordeaux-300 transition">Actualités</Link></li>
+          <li><Link href="/actualites" className="hover:text-bordeaux-300 transition">ActualitÃ©s</Link></li>
           <li><Link href="/appels-candidatures" className="hover:text-bordeaux-300 transition">Appels</Link></li>
-          <li><Link href="/a-propos" className="hover:text-bordeaux-300 transition">À propos</Link></li>
+          <li><Link href="/a-propos" className="hover:text-bordeaux-300 transition">Ã€ propos</Link></li>
           <li><Link href="/contact" className="hover:text-bordeaux-300 transition">Contact</Link></li>
-          <li><Link href="/inscription" className="bg-white text-marron-800 px-5 py-2 rounded-full font-bold hover:bg-gray-100 transition shadow-md">Inscription</Link></li>
+          <li><Link href="/inscription-google" className="bg-white text-marron-800 px-5 py-2 rounded-full font-bold hover:bg-gray-100 transition shadow-md">Inscription</Link></li>
         </ul>
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white"><Menu size={28} /></button>
       </nav>
@@ -32,11 +32,11 @@ export default function Header() {
         <div className="md:hidden bg-marron-800/95 backdrop-blur-lg px-4 pt-2 pb-4 space-y-3 animate-fade-in">
           <Link href="/" className="block text-white hover:text-bordeaux-300">Accueil</Link>
           <Link href="/formations" className="block text-white hover:text-bordeaux-300">Formations</Link>
-          <Link href="/actualites" className="block text-white hover:text-bordeaux-300">Actualités</Link>
+          <Link href="/actualites" className="block text-white hover:text-bordeaux-300">ActualitÃ©s</Link>
           <Link href="/appels-candidatures" className="block text-white hover:text-bordeaux-300">Appels</Link>
-          <Link href="/a-propos" className="block text-white hover:text-bordeaux-300">À propos</Link>
+          <Link href="/a-propos" className="block text-white hover:text-bordeaux-300">Ã€ propos</Link>
           <Link href="/contact" className="block text-white hover:text-bordeaux-300">Contact</Link>
-          <Link href="/inscription" className="block bg-white text-marron-800 text-center px-4 py-2 rounded-full font-bold">Inscription</Link>
+          <Link href="/inscription-google" className="block bg-white text-marron-800 text-center px-4 py-2 rounded-full font-bold">Inscription</Link>
         </div>
       )}
     </header>
