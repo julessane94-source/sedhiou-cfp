@@ -4,11 +4,11 @@
 
 @layer base {
   body {
-    @apply bg-bgPage text-textDark;
+    @apply bg-secondary text-gray-800;
     font-family: 'Inter', system-ui, sans-serif;
   }
   h1, h2, h3, h4 {
-    @apply font-bold text-textDark;
+    @apply font-bold text-primary;
   }
   a {
     @apply transition-all duration-200;
@@ -20,22 +20,25 @@
     @apply px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 inline-block text-center;
   }
   .btn-primary {
-    @apply bg-menu text-white hover:bg-menuLight;
+    @apply bg-primary text-white hover:bg-accent;
   }
-  .btn-secondary {
-    @apply bg-white text-textDark border border-menu/30 hover:bg-menu/10;
+  .btn-white {
+    @apply bg-white text-primary hover:bg-gray-100;
   }
   .card-light {
-    @apply bg-bgCard rounded-xl shadow-md p-6 text-textDark;
+    @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-6 text-gray-800;
+  }
+  .card-glass {
+    @apply bg-white/20 backdrop-blur-md rounded-2xl shadow-lg border border-white/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
 }
 
 /* Animations */
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
+  animation: fadeIn 0.8s ease-out forwards;
 }
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out forwards;
+  animation: slideUp 0.6s ease-out forwards;
 }
 .animation-delay-200 {
   animation-delay: 0.2s;
@@ -45,6 +48,6 @@
   to { opacity: 1; }
 }
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }

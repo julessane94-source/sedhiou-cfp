@@ -9,12 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Couleurs personnalisées
-        menu: '#772a1d',      // menu et footer
-        menuLight: '#8e3a2a',  // variante plus claire pour hover
-        bgPage: '#d6bfbb',     // fond général des pages
-        bgCard: '#f5efed',     // carte légèrement plus claire que le fond
-        textDark: '#2d2a2a',   // texte sombre pour lisibilité
+        primary: '#772a1d',    // bordeaux/brique for menu and footer
+        secondary: '#d6bfbb',   // beige rosé for background
+        accent: '#5a1f15',      // darker variant
       },
       fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
       animation: {
