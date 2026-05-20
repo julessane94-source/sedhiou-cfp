@@ -5,14 +5,18 @@ import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 
 async function getAppel(slug: string) {
-  const query = `*[_type == "appelCandidature" && slug.current == $slug][0]{
-    title,
-    description,
-    deadline,
-    status,
-    googleFormUrl
-  }`
-  return await client.fetch(query, { slug })
+  try {
+    const query = `*[_type == "appelCandidature" && slug.current == $slug][0]{
+      title,
+      description,
+      deadline,
+      status,
+      googleFormUrl
+    }`
+    return await client.fetch(query, { slug })
+  } catch (error) {
+    return null
+  }
 }
 
 export default async function AppelDetailPage({ params }: { params: { slug: string } }) {
@@ -20,14 +24,14 @@ export default async function AppelDetailPage({ params }: { params: { slug: stri
   if (!appel) notFound()
   const isOpen = appel.status === 'open' && new Date(appel.deadline) > new Date()
   return (
-    <div className="pt-32 pb-20 px-4 bg-gradient-to-br from-bordeaux-50 to-white max-w-4xl mx-auto">
-      <Link href="/appels-candidatures" className="text-bordeaux-600 hover:underline">← Retour</Link>
-      <h1 className="text-4xl font-bold mt-4 text-bordeaux-800">{appel.title}</h1>
-      <p className="text-gray-700 mt-2">{appel.description}</p>
-      <p className="text-gray-500">📅 {new Date(appel.deadline).toLocaleDateString()}</p>
+    <div className="pt-32 pb-20 px-4 max-w-4xl mx-auto">
+      <Link href="/appels-candidatures" className="text-white hover:underline">&larr; Retour</Link>
+      <h1 className="text-4xl font-bold text-white mt-4">{appel.title}</h1>
+      <p className="text-gray-200 mt-2">{appel.description}</p>
+      <p className="text-gray-300 mt-2">📅 {new Date(appel.deadline).toLocaleDateString()}</p>
       {isOpen && appel.googleFormUrl && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4 text-bordeaux-800">Formulaire de candidature</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Formulaire de candidature</h2>
           <iframe src={appel.googleFormUrl} width="100%" height="800" frameBorder="0" className="rounded-lg"></iframe>
         </div>
       )}

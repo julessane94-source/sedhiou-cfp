@@ -1,6 +1,5 @@
 import { client } from '@/lib/sanity/client'
 import Link from 'next/link'
-import { Calendar, Clock } from 'lucide-react'
 
 interface Formation {
   _id: string
@@ -27,7 +26,10 @@ async function getFormations(): Promise<Formation[]> {
       "imageUrl": image.asset->url
     }`
     return await client.fetch(query)
-  } catch (e) { return [] }
+  } catch (error) {
+    console.error("Erreur chargement formations:", error)
+    return []
+  }
 }
 
 export default async function FormationsPage() {
@@ -36,19 +38,18 @@ export default async function FormationsPage() {
   return (
     <div className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-4 animate-fade-in">Nos Formations</h1>
-        <p className="text-center text-gray-200 mb-12 animate-fade-in animation-delay-200">Des parcours d'excellence pour votre avenir</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-12">Nos Formations</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {formations.map((f, i) => (
-            <div key={f._id} className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg border border-white/20 p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+          {formations.map((f) => (
+            <div key={f._id} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 transition hover:-translate-y-1">
               {f.imageUrl && <img src={f.imageUrl} className="w-full h-48 object-cover rounded-lg mb-4" />}
               <h2 className="text-xl font-bold text-white mb-2">{f.title}</h2>
               <p className="text-gray-200 mb-4">{f.description?.substring(0, 100)}...</p>
               <div className="flex justify-between text-sm text-gray-300 mb-4">
-                <span className="flex items-center gap-1"><Clock size={14} /> {f.duration || '3 ans'}</span>
-                <span className="flex items-center gap-1"><Calendar size={14} /> {f.price || 'Sur devis'}</span>
+                <span>⏱️ {f.duration || '3 ans'}</span>
+                <span>💰 {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black">DÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©couvrir</Link>
+              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black inline-block">En savoir plus</Link>
             </div>
           ))}
         </div>
