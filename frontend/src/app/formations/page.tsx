@@ -32,29 +32,27 @@ async function getFormations(): Promise<Formation[]> {
   }
 }
 
-// Fonction pour normaliser le slug (remplacer les espaces par des tirets)
-function normalizeSlug(slug: string): string {
-  return slug?.replace(/\s+/g, '-').toLowerCase() || ''
-}
-
 export default async function FormationsPage() {
   const formations = await getFormations()
-  if (!formations.length) return <div className="pt-32 text-center text-white">Aucune formation pour le moment.</div>
+  if (!formations.length) return <div className="pt-32 text-center text-stone-600">Aucune formation pour le moment.</div>
   return (
     <div className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-12">Nos Formations</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-in">Nos Formations</h1>
+        <p className="text-center text-stone-600 mb-12 animate-fade-in delay-100">Des parcours d'excellence pour votre avenir</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {formations.map((f) => (
-            <div key={f._id} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 transition hover:-translate-y-1">
+          {formations.map((f, i) => (
+            <div key={f._id} className="card-glass p-6 animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
               {f.imageUrl && <img src={f.imageUrl} className="w-full h-48 object-cover rounded-lg mb-4" />}
-              <h2 className="text-xl font-bold text-white mb-2">{f.title}</h2>
-              <p className="text-gray-200 mb-4">{f.description?.substring(0, 100)}...</p>
-              <div className="flex justify-between text-sm text-gray-300 mb-4">
+              <h2 className="text-xl font-bold text-stone-800 mb-2">{f.title}</h2>
+              <p className="text-stone-600 mb-4">{f.description?.substring(0, 100)}...</p>
+              <div className="flex justify-between text-sm text-stone-500 mb-4">
                 <span>⏱️ {f.duration || '3 ans'}</span>
                 <span>💰 {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${normalizeSlug(f.slug)}`} className="btn-modern-black inline-block">En savoir plus</Link>
+              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern btn-primary inline-block w-full text-center">
+                En savoir plus
+              </Link>
             </div>
           ))}
         </div>
