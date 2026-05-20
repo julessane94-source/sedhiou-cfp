@@ -15,7 +15,7 @@ async function getAccueil() {
       contentBlocks
     }`
     const data = await client.fetch(query)
-    console.log("Accueil data:", data) // pour debug sur Vercel
+    console.log("Données accueil récupérées:", data) // pour debug
     return data
   } catch (error) {
     console.error("Erreur chargement accueil:", error)
@@ -25,24 +25,24 @@ async function getAccueil() {
 
 export default async function HomePage() {
   const data = await getAccueil()
+
   return (
-    <div className="min-h-screen">
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {data?.heroImage && (
-          <div className="absolute inset-0 z-0">
-            <img src={data.heroImage} className="w-full h-full object-cover opacity-20" />
-          </div>
-        )}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-stone-800">{data?.heroTitle || 'Bienvenue au CFP SEDHIOU'}</h1>
-          <p className="text-xl md:text-2xl mb-8 text-stone-600">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="btn-modern btn-primary inline-flex items-center gap-2">
-            Découvrir nos formations →
-          </Link>
+    <div className="animate-fade-in">
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-bordeaux-800 to-bordeaux-700 text-white">
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 animate-slide-up">{data?.heroTitle || 'Bienvenue au CFP SEDHIOU'}</h1>
+          <p className="text-xl md:text-2xl mb-8 animate-slide-up animation-delay-200">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
+          <Link href="/formations" className="btn-modern-black animate-fade-in animation-delay-400">Découvrir nos formations →</Link>
         </div>
       </section>
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        {data?.contentBlocks && <PortableText value={data.contentBlocks} />}
+        {data?.contentBlocks ? (
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg text-gray-800">
+            <PortableText value={data.contentBlocks} />
+          </div>
+        ) : (
+          <p className="text-center text-gray-600">Aucun contenu pour le moment. Veuillez créer un document "accueil" dans Sanity.</p>
+        )}
       </div>
     </div>
   )
