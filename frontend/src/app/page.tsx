@@ -25,7 +25,7 @@ export default async function HomePage() {
   const data = await getAccueil()
   return (
     <div className="animate-fade-in">
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-primary/90 to-primary/70 text-white">
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-stone-700 to-stone-800 text-white">
         <div className="relative z-10 text-center px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 animate-slide-up">{data?.heroTitle || 'Bienvenue au CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8 animate-slide-up animation-delay-200">{data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
@@ -36,9 +36,11 @@ export default async function HomePage() {
         {data?.contentBlocks ? (
           <PortableText value={data.contentBlocks} />
         ) : (
-          <div className="bg-white/80 rounded-lg p-8 text-center">
-            <p className="text-gray-700">Contenu de la page d'accueil à personnaliser.</p>
-            <p className="text-sm text-gray-500 mt-2">(Connectez-vous à Sanity Studio, créez/modifiez le document "Accueil" et publiez-le.)</p>
+          <div className="text-center text-gray-300 bg-stone-800/50 p-8 rounded-lg">
+            <p>Contenu de la page d'accueil à personnaliser.</p>
+            <p className="text-sm mt-2">
+              (Si vous êtes administrateur, connectez-vous à Sanity Studio, créez/modifiez le document "Accueil" et publiez-le.)
+            </p>
           </div>
         )}
       </div>
