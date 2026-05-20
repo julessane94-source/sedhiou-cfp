@@ -1,10 +1,20 @@
 import { client } from '@/lib/sanity/client'
 import Link from 'next/link'
 
+interface Appel {
+  _id: string
+  title: string
+  description: string
+  deadline: string
+  status: string
+  slug: string
+  googleFormUrl?: string
+}
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-async function getAppels() {
+async function getAppels(): Promise<Appel[]> {
   try {
     const query = `*[_type == "appelCandidature"] | order(deadline asc) {
       _id,
@@ -25,15 +35,16 @@ async function getAppels() {
 export default async function AppelsPage() {
   const appels = await getAppels()
   const now = new Date()
+  if (!appels.length) return <div className="pt-32 text-center">Aucun appel à candidatures actuellement.</div>
   return (
     <div className="pt-32 pb-20 px-4 min-h-screen bg-gradient-to-br from-stone-100 to-white">
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-12 animate-fade-in">Appels à candidatures</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-12">Appels à candidatures</h1>
         <div className="grid md:grid-cols-2 gap-8">
-          {appels.map((a, i) => {
+          {appels.map((a: Appel, i: number) => {
             const isOpen = a.status === 'open' && new Date(a.deadline) > now
             return (
-              <div key={a._id} className="card-light animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div key={a._id} className="card-light">
                 <h2 className="text-2xl font-bold text-stone-800 mb-2">{a.title}</h2>
                 <p className="text-stone-700 mb-4">{a.description}</p>
                 <p className="text-stone-500 text-sm mb-2">📅 {new Date(a.deadline).toLocaleDateString()}</p>

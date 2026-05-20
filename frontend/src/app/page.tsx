@@ -33,14 +33,10 @@ export default async function HomePage() {
         </div>
       </section>
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        {data?.contentBlocks ? (
-          <PortableText value={data.contentBlocks} />
-        ) : (
-          <div className="text-center text-gray-300 bg-stone-800/50 p-8 rounded-lg">
+        {data?.contentBlocks ? <PortableText value={data.contentBlocks} /> : (
+          <div className="text-center text-stone-300 bg-stone-800/50 p-8 rounded-lg">
             <p>Contenu de la page d'accueil à personnaliser.</p>
-            <p className="text-sm mt-2">
-              (Si vous êtes administrateur, connectez-vous à Sanity Studio, créez/modifiez le document "Accueil" et publiez-le.)
-            </p>
+            <p className="text-sm mt-2">Connectez-vous à Sanity Studio et publiez le document "Accueil".</p>
           </div>
         )}
       </div>

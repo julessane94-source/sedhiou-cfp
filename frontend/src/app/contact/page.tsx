@@ -31,10 +31,10 @@ export default async function ContactPage() {
   return (
     <div className="pt-32 pb-20 px-4 min-h-screen bg-gradient-to-br from-stone-100 to-white">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-in">{contact?.title || 'Contact'}</h1>
-        <p className="text-center text-stone-600 mb-12 animate-fade-in animation-delay-200">{contact?.subtitle}</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4">{contact?.title || 'Contact'}</h1>
+        <p className="text-center text-stone-600 mb-12">{contact?.subtitle}</p>
         <div className="grid md:grid-cols-2 gap-10">
-          <div className="card-light animate-slide-up">
+          <div className="card-light">
             <h2 className="text-2xl font-bold text-stone-800 mb-6">Coordonnées</h2>
             <div className="space-y-4 text-stone-700">
               <p>📍 {contact?.address}</p>
@@ -50,7 +50,7 @@ export default async function ContactPage() {
               {contact?.whatsappNumber && <a href={`https://wa.me/${contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-stone-700 hover:text-stone-900 text-2xl">💬</a>}
             </div>
           </div>
-          <div className="card-light animate-slide-up animation-delay-200">
+          <div className="card-light">
             <form action="/api/contact" method="POST" className="space-y-5">
               <input type="text" name="name" placeholder="Votre nom" className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-700 text-stone-800" />
               <input type="email" name="email" placeholder="Votre email" className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-700 text-stone-800" />
