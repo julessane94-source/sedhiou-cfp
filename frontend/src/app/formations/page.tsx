@@ -32,6 +32,11 @@ async function getFormations(): Promise<Formation[]> {
   }
 }
 
+// Fonction pour normaliser le slug (remplacer les espaces par des tirets)
+function normalizeSlug(slug: string): string {
+  return slug?.replace(/\s+/g, '-').toLowerCase() || ''
+}
+
 export default async function FormationsPage() {
   const formations = await getFormations()
   if (!formations.length) return <div className="pt-32 text-center text-white">Aucune formation pour le moment.</div>
@@ -49,7 +54,7 @@ export default async function FormationsPage() {
                 <span>⏱️ {f.duration || '3 ans'}</span>
                 <span>💰 {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern-black inline-block">En savoir plus</Link>
+              <Link href={`/formations/${normalizeSlug(f.slug)}`} className="btn-modern-black inline-block">En savoir plus</Link>
             </div>
           ))}
         </div>
