@@ -21,7 +21,8 @@ export default async function DebugAccueilPage() {
         <p>Dataset: {process.env.NEXT_PUBLIC_SANITY_DATASET}</p>
       </div>
     )
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error
     return <div style={{ padding: '2rem' }}>Erreur : {error.message}</div>
   }
 }
