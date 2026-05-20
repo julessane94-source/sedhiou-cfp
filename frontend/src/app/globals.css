@@ -4,11 +4,12 @@
 
 @layer base {
   body {
-    @apply bg-secondary text-gray-800;
+    background-color: #d6bfbb;
+    color: #2d2a24;
     font-family: 'Inter', system-ui, sans-serif;
   }
   h1, h2, h3, h4 {
-    @apply font-bold text-primary;
+    @apply font-bold text-stone-800;
   }
   a {
     @apply transition-all duration-200;
@@ -20,20 +21,33 @@
     @apply px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 inline-block text-center;
   }
   .btn-primary {
-    @apply bg-primary text-white hover:bg-accent;
+    background-color: #772a1d;
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: #5c2016;
   }
   .btn-white {
-    @apply bg-white text-primary hover:bg-gray-100;
+    background-color: white;
+    color: #772a1d;
+  }
+  .btn-white:hover {
+    background-color: #f0f0f0;
   }
   .card-light {
-    @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-6 text-gray-800;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
   }
-  .card-glass {
-    @apply bg-white/20 backdrop-blur-md rounded-2xl shadow-lg border border-white/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  .card-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* Animations */
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
 }
