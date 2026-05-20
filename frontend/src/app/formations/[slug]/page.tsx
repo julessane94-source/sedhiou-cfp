@@ -4,24 +4,22 @@ import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const dynamicParams = true
 
 async function getFormation(slug: string) {
-  try {
-    const query = `*[_type == "formation" && slug.current == $slug][0]{
-      title,
-      description,
-      duration,
-      price,
-      startDate,
-      "imageUrl": image.asset->url,
-      content
-    }`
-    return await client.fetch(query, { slug })
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+  // Normaliser le slug reçu (remplacer les tirets par des espaces? Non, on s'attend à ce que le slug dans Sanity soit normalisé)
+  // On suppose que le slug dans Sanity n'a pas d'espaces, donc on décode l'URL et on utilise directement.
+  const decodedSlug = decodeURIComponent(slug)
+  const query = `*[_type == "formation" && slug.current == $decodedSlug][0]{
+    title,
+    description,
+    duration,
+    price,
+    startDate,
+    "imageUrl": image.asset->url,
+    content
+  }`
+  return await client.fetch(query)
 }
 
 export default async function FormationDetailPage({ params }: { params: { slug: string } }) {
