@@ -4,11 +4,11 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800;
+    @apply bg-bgPage text-textDark;
     font-family: 'Inter', system-ui, sans-serif;
   }
-  h1, h2, h3 {
-    @apply font-bold text-gray-900;
+  h1, h2, h3, h4 {
+    @apply font-bold text-textDark;
   }
   a {
     @apply transition-all duration-200;
@@ -17,12 +17,34 @@
 
 @layer components {
   .btn-modern {
-    @apply px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 inline-block text-center;
   }
   .btn-primary {
-    @apply bg-gray-900 text-white hover:bg-gray-800;
+    @apply bg-menu text-white hover:bg-menuLight;
   }
-  .card-glass {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 transition-all duration-300 hover:shadow-xl;
+  .btn-secondary {
+    @apply bg-white text-textDark border border-menu/30 hover:bg-menu/10;
   }
+  .card-light {
+    @apply bg-bgCard rounded-xl shadow-md p-6 text-textDark;
+  }
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

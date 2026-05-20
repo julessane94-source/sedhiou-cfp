@@ -33,11 +33,11 @@ async function getAppels(): Promise<Appel[]> {
 export default async function AppelsPage() {
   const appels = await getAppels()
   const now = new Date()
-  if (!appels.length) return <div className="pt-32 text-center text-gray-600">Aucun appel à candidatures actuellement.</div>
+  if (!appels.length) return <div className="pt-32 text-center text-gray-600">Aucun appel Ã  candidatures actuellement.</div>
   return (
     <div className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">Appels à candidatures</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">Appels Ã  candidatures</h1>
         <div className="grid md:grid-cols-2 gap-8">
           {appels.map((a) => {
             const isOpen = a.status === 'open' && new Date(a.deadline) > now
@@ -45,9 +45,9 @@ export default async function AppelsPage() {
               <div key={a._id} className="bg-white rounded-xl shadow-md p-6 transition hover:shadow-lg">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">{a.title}</h2>
                 <p className="text-gray-700 mb-4">{a.description}</p>
-                <p className="text-gray-500 text-sm mb-2">📅 {new Date(a.deadline).toLocaleDateString()}</p>
+                <p className="text-gray-500 text-sm mb-2">ðŸ“… {new Date(a.deadline).toLocaleDateString()}</p>
                 <p className={`font-semibold ${isOpen ? 'text-green-600' : 'text-red-600'}`}>
-                  {isOpen ? '✅ Ouvert' : '❌ Fermé'}
+                  {isOpen ? 'âœ… Ouvert' : 'âŒ FermÃ©'}
                 </p>
                 {isOpen && <Link href={`/appels-candidatures/${a.slug}`} className="inline-block mt-4 bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">Postuler maintenant</Link>}
               </div>

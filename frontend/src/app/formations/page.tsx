@@ -47,8 +47,8 @@ export default async function FormationsPage() {
               <h2 className="text-xl font-bold text-stone-800 mb-2">{f.title}</h2>
               <p className="text-stone-600 mb-4">{f.description?.substring(0, 100)}...</p>
               <div className="flex justify-between text-sm text-stone-500 mb-4">
-                <span>⏱️ {f.duration || '3 ans'}</span>
-                <span>💰 {f.price || 'Sur devis'}</span>
+                <span>â±ï¸ {f.duration || '3 ans'}</span>
+                <span>ðŸ’° {f.price || 'Sur devis'}</span>
               </div>
               <Link href={`/formations/${f.slug || f._id}`} className="btn-modern btn-primary inline-block w-full text-center">
                 En savoir plus

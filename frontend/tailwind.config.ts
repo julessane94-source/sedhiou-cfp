@@ -9,32 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bordeaux: {
-          50: '#fdf2f2',
-          100: '#fce4e4',
-          200: '#f7c9c9',
-          300: '#f0a3a3',
-          400: '#e57373',
-          500: '#d32f2f',
-          600: '#c62828',
-          700: '#b71c1c',
-          800: '#8b0000',
-          900: '#5c0000',
-          DEFAULT: '#8b0000',
-        },
-        marron: {
-          50: '#f8f4f0',
-          100: '#e8ddd3',
-          200: '#d1bba6',
-          300: '#b9997a',
-          400: '#a27d5a',
-          500: '#8b6140',
-          600: '#6b4a30',
-          700: '#4b3320',
-          800: '#2b1c10',
-          900: '#150e05',
-          DEFAULT: '#6b4a30',
-        },
+        // Couleurs personnalisées
+        menu: '#772a1d',      // menu et footer
+        menuLight: '#8e3a2a',  // variante plus claire pour hover
+        bgPage: '#d6bfbb',     // fond général des pages
+        bgCard: '#f5efed',     // carte légèrement plus claire que le fond
+        textDark: '#2d2a2a',   // texte sombre pour lisibilité
       },
       fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
       animation: {

@@ -7,7 +7,7 @@ export const revalidate = 0
 
 async function getAccueil() {
   try {
-    console.log("Récupération des données accueil...")
+    console.log("RÃ©cupÃ©ration des donnÃ©es accueil...")
     const query = `*[_type == "accueil"][0]{
       heroTitle,
       heroSubtitle,
@@ -16,7 +16,7 @@ async function getAccueil() {
       contentBlocks
     }`
     const data = await client.fetch(query)
-    console.log("Données accueil reçues:", data ? "OK" : "null")
+    console.log("DonnÃ©es accueil reÃ§ues:", data ? "OK" : "null")
     return data
   } catch (error) {
     console.error("Erreur chargement accueil:", error)
@@ -39,7 +39,7 @@ export default async function HomePage() {
             {data?.heroSubtitle || 'Formez-vous pour un avenir meilleur'}
           </p>
           <Link href="/formations" className="btn-modern btn-white">
-            Découvrir nos formations →
+            DÃ©couvrir nos formations â†’
           </Link>
         </div>
       </section>
@@ -47,16 +47,16 @@ export default async function HomePage() {
         {data?.contentBlocks ? (
           <PortableText value={data.contentBlocks} />
         ) : (
-          <div className="text-center text-gray-300 bg-stone-800/50 p-8 rounded-lg">
-            <p>Contenu de la page d'accueil à personnaliser.</p>
+          <div className="text-center text-gray-300 bg-menu/20 p-8 rounded-lg">
+            <p>Contenu de la page d'accueil Ã  personnaliser.</p>
             <p className="text-sm mt-2">
-              (Si vous êtes administrateur, connectez-vous à Sanity Studio, créez/modifiez le document "Accueil" et publiez-le.)
+              (Si vous Ãªtes administrateur, connectez-vous Ã  Sanity Studio, crÃ©ez/modifiez le document "Accueil" et publiez-le.)
             </p>
             {!hasContent && (
               <div className="mt-4 p-4 bg-yellow-800/30 rounded">
-                <p className="text-yellow-200">⚠️ Aucune donnée trouvée dans Sanity.</p>
-                <p className="text-xs">Vérifiez que le document "accueil" existe et est PUBLIÉ.</p>
-                <a href="/debug-accueil" className="text-amber-300 underline">Voir debug →</a>
+                <p className="text-yellow-200">âš ï¸ Aucune donnÃ©e trouvÃ©e dans Sanity.</p>
+                <p className="text-xs">VÃ©rifiez que le document "accueil" existe et est PUBLIÃ‰.</p>
+                <a href="/debug-accueil" className="text-amber-300 underline">Voir debug â†’</a>
               </div>
             )}
           </div>

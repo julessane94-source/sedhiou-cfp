@@ -34,19 +34,19 @@ export default async function ContactPage() {
         <p className="text-center text-gray-600 mb-12">{contact?.subtitle}</p>
         <div className="grid md:grid-cols-2 gap-10">
           <div className="bg-white rounded-xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Coordonnées</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">CoordonnÃ©es</h2>
             <div className="space-y-4 text-gray-700">
-              <p>📍 {contact?.address}</p>
-              <p>📞 {contact?.phone}</p>
-              <p>✉️ {contact?.email}</p>
-              <p>🕒 {contact?.hours}</p>
+              <p>ðŸ“ {contact?.address}</p>
+              <p>ðŸ“ž {contact?.phone}</p>
+              <p>âœ‰ï¸ {contact?.email}</p>
+              <p>ðŸ•’ {contact?.hours}</p>
             </div>
             <div className="flex space-x-4 mt-6">
-              {contact?.facebookUrl && <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">📘</a>}
-              {contact?.instagramUrl && <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">📷</a>}
-              {contact?.linkedinUrl && <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">🔗</a>}
-              {contact?.twitterUrl && <a href={contact.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">🐦</a>}
-              {contact?.whatsappNumber && <a href={`https://wa.me/${contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">💬</a>}
+              {contact?.facebookUrl && <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">ðŸ“˜</a>}
+              {contact?.instagramUrl && <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">ðŸ“·</a>}
+              {contact?.linkedinUrl && <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">ðŸ”—</a>}
+              {contact?.twitterUrl && <a href={contact.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">ðŸ¦</a>}
+              {contact?.whatsappNumber && <a href={`https://wa.me/${contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">ðŸ’¬</a>}
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-md p-8">
