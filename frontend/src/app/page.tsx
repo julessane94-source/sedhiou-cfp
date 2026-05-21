@@ -1,6 +1,9 @@
+'use client'
+
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -33,10 +36,7 @@ function getEmbedUrl(url: string | null | undefined): string | null {
   } else if (url.includes('youtube.com/embed/')) {
     return url
   }
-  if (videoId) {
-    return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&rel=0`
-  }
-  return null
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : null
 }
 
 async function getAccueil() {
@@ -82,99 +82,118 @@ async function getAccueil() {
         link
       }
     }`
-    const data = await client.fetch(query)
-    console.log('[ACCUEIL] Données reçues:', { heroTitle: data?.heroTitle, videoUrl: data?.videoUrl, directorImage: data?.directorMessage?.image, caiImage: data?.caiMessage?.image })
-    return data
+    return await client.fetch(query)
   } catch (err) {
-    console.error('[ACCUEIL] Erreur:', err)
+    console.error(err)
     return null
   }
 }
 
-export default async function HomePage() {
-  const data = await getAccueil()
-  if (!data) {
-    return <div className="pt-32 text-center" style={{ backgroundColor: '#d6bfbb' }}>Chargement des données...</div>
-  }
+export default function HomePage() {
+  const [data, setData] = useState<any>(null)
+  const [showDirector, setShowDirector] = useState(false)
+  const [showCai, setShowCai] = useState(false)
+
+  useEffect(() => {
+    getAccueil().then(setData)
+  }, [])
+
+  if (!data) return <div className="pt-32 text-center">Chargement...</div>
 
   const embedUrl = getEmbedUrl(data.videoUrl)
-  console.log('[ACCUEIL] URL embed générée:', embedUrl)
 
   return (
-    <div style={{ backgroundColor: '#d6bfbb' }}>
-      {/* HERO SECTION - fond clair au lieu de noir */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#d6bfbb' }}>
-        {embedUrl && (
+    <div>
+      {/* Hero avec vidéo en premier plan */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        {embedUrl ? (
           <div className="absolute inset-0 w-full h-full z-0">
             <iframe
               src={embedUrl}
-              className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-30"
+              className="w-full h-full object-cover"
               frameBorder="0"
               allow="autoplay; encrypted-media"
               allowFullScreen
             />
+            <div className="absolute inset-0 bg-black/40"></div>
           </div>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-stone-800 to-stone-900 z-0"></div>
         )}
-        {!embedUrl && data.heroImage && (
-          <div className="absolute inset-0 z-0">
-            <img src={data.heroImage} className="w-full h-full object-cover opacity-30" />
-          </div>
-        )}
-        <div className="relative z-10 text-center px-4 text-stone-800">
+        <div className="relative z-10 text-center px-4 text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 animate-fade-up">{data.heroTitle || 'CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8 animate-fade-up delay-100">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-block bg-[#772a1d] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#5c2016] transition transform hover:-translate-y-1 shadow-lg animate-fade-up delay-200">Découvrir nos formations →</Link>
+          <Link href="/formations" className="inline-block bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
         </div>
       </section>
 
-      {/* MESSAGE DU DIRECTEUR */}
-      {data.directorMessage?.content && (
-        <section className="py-20 px-4 bg-white/50">
-          <div className="container mx-auto max-w-5xl flex flex-col md:flex-row gap-10 items-center">
-            {data.directorMessage.image && (
-              <div className="md:w-1/3 flex justify-center">
-                <div className="w-64 h-64 rounded-full overflow-hidden shadow-xl border-4 border-white">
-                  <img src={data.directorMessage.image} className="w-full h-full object-cover" />
+      {/* Section des messages avec boutons */}
+      <div className="py-20 px-4 bg-[#d6bfbb]">
+        <div className="container mx-auto max-w-5xl">
+          {data.directorMessage?.content && (
+            <div className="mb-12 bg-white rounded-2xl shadow-xl overflow-hidden">
+              <button
+                onClick={() => setShowDirector(!showDirector)}
+                className="w-full flex justify-between items-center p-6 text-left bg-[#772a1d] text-white font-bold text-xl hover:bg-[#5c2016] transition"
+              >
+                <span>📢 {data.directorMessage.title || 'Mot du Directeur'}</span>
+                <span>{showDirector ? '▲' : '▼'}</span>
+              </button>
+              {showDirector && (
+                <div className="p-6 flex flex-col md:flex-row gap-8 items-center">
+                  {data.directorMessage.image && (
+                    <div className="md:w-1/3 flex justify-center">
+                      <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-[#772a1d]">
+                        <img src={data.directorMessage.image} className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  )}
+                  <div className="md:w-2/3">
+                    <div className="prose prose-stone max-w-none"><PortableText value={data.directorMessage.content} /></div>
+                    {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
+                  </div>
                 </div>
-              </div>
-            )}
-            <div className="md:w-2/3">
-              <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.directorMessage.title || 'Mot du Directeur'}</h2>
-              <div className="prose prose-stone"><PortableText value={data.directorMessage.content} /></div>
-              {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
+              )}
             </div>
-          </div>
-        </section>
-      )}
+          )}
 
-      {/* MESSAGE DU RESPONSABLE CAI */}
-      {data.caiMessage?.content && (
-        <section className="py-20 px-4 bg-stone-100">
-          <div className="container mx-auto max-w-5xl flex flex-col md:flex-row-reverse gap-10 items-center">
-            {data.caiMessage.image && (
-              <div className="md:w-1/3 flex justify-center">
-                <div className="w-64 h-64 rounded-full overflow-hidden shadow-xl border-4 border-white">
-                  <img src={data.caiMessage.image} className="w-full h-full object-cover" />
+          {data.caiMessage?.content && (
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <button
+                onClick={() => setShowCai(!showCai)}
+                className="w-full flex justify-between items-center p-6 text-left bg-[#772a1d] text-white font-bold text-xl hover:bg-[#5c2016] transition"
+              >
+                <span>🤝 {data.caiMessage.title || 'Mot de la responsable CAI'}</span>
+                <span>{showCai ? '▲' : '▼'}</span>
+              </button>
+              {showCai && (
+                <div className="p-6 flex flex-col md:flex-row gap-8 items-center">
+                  {data.caiMessage.image && (
+                    <div className="md:w-1/3 flex justify-center">
+                      <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-[#772a1d]">
+                        <img src={data.caiMessage.image} className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  )}
+                  <div className="md:w-2/3">
+                    <div className="prose prose-stone max-w-none"><PortableText value={data.caiMessage.content} /></div>
+                    {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
+                  </div>
                 </div>
-              </div>
-            )}
-            <div className="md:w-2/3">
-              <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
-              <div className="prose prose-stone"><PortableText value={data.caiMessage.content} /></div>
-              {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
+              )}
             </div>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </div>
 
-      {/* ÉVÉNEMENTS */}
+      {/* Événements vedettes */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
-        <section className="py-20 px-4">
+        <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center text-stone-800 mb-12">Événements à venir</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {data.featuredEvents.map((event: FeaturedEvent) => (
-                <div key={event._id} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+                <div key={event._id} className="group bg-stone-50 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                   {event.coverImage && <div className="h-56 overflow-hidden"><img src={event.coverImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /></div>}
                   <div className="p-6">
                     <p className="text-sm text-stone-500 mb-1">{new Date(event.publishedAt).toLocaleDateString()}</p>
@@ -189,7 +208,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* FORMATIONS VEDETTES */}
+      {/* Formations vedettes */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
@@ -210,9 +229,9 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* STATISTIQUES */}
+      {/* Statistiques */}
       {data.stats && data.stats.length > 0 && (
-        <div className="py-20 px-4">
+        <div className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-8">
             {data.stats.map((stat: { value: string; label: string }, idx: number) => (
               <div key={idx} className="text-center">
@@ -224,7 +243,7 @@ export default async function HomePage() {
         </div>
       )}
 
-      {/* BOTTOM CTA */}
+      {/* Call to Action */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
