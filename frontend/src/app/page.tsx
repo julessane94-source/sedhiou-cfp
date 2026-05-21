@@ -33,7 +33,7 @@ async function getAccueil() {
 
 export default async function HomePage() {
   const data = await getAccueil()
-  if (!data) return <div className="pt-32 text-center">Chargement...</div>
+  if (!data) return <div className="pt-24 text-center">Chargement...</div>
   const embedUrl = getEmbedUrl(data.videoUrl)
 
   return (
@@ -46,18 +46,18 @@ export default async function HomePage() {
         <div className="relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-2">{data.heroTitle || 'CFP SEDHIOU'}</h1>
           <p className="text-lg md:text-xl mb-4">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-block bg-white text-stone-800 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition">Découvrir →</Link>
+          <Link href="/formations" className="inline-block bg-white text-stone-800 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition">DÃ©couvrir â†’</Link>
         </div>
       </section>
 
-      {/* Messages avec photos (accordéon compact) */}
+      {/* Messages avec photos (accordÃ©on compact) */}
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
         {data.directorMessage?.content && (
           <details className="bg-white rounded-xl shadow-sm p-4 group">
             <summary className="flex items-center gap-3 cursor-pointer list-none font-bold text-stone-800">
               {data.directorMessage.image && <img src={data.directorMessage.image} className="w-10 h-10 rounded-full object-cover" />}
               <span>{data.directorMessage.title || 'Mot du Directeur'}</span>
-              <span className="ml-auto text-[#772a1d]">▼</span>
+              <span className="ml-auto text-[#772a1d]">â–¼</span>
             </summary>
             <div className="mt-3 pl-0 md:pl-14"><PortableText value={data.directorMessage.content} /></div>
             {data.directorMessage.signature && <p className="mt-2 text-sm italic text-stone-500">{data.directorMessage.signature}</p>}
@@ -68,7 +68,7 @@ export default async function HomePage() {
             <summary className="flex items-center gap-3 cursor-pointer list-none font-bold text-stone-800">
               {data.caiMessage.image && <img src={data.caiMessage.image} className="w-10 h-10 rounded-full object-cover" />}
               <span>{data.caiMessage.title || 'Mot de la responsable CAI'}</span>
-              <span className="ml-auto text-[#772a1d]">▼</span>
+              <span className="ml-auto text-[#772a1d]">â–¼</span>
             </summary>
             <div className="mt-3 pl-0 md:pl-14"><PortableText value={data.caiMessage.content} /></div>
             {data.caiMessage.signature && <p className="mt-2 text-sm italic text-stone-500">{data.caiMessage.signature}</p>}
@@ -76,10 +76,10 @@ export default async function HomePage() {
         )}
       </div>
 
-      {/* Événements en vedette (grid compacte) */}
+      {/* Ã‰vÃ©nements en vedette (grid compacte) */}
       {data.featuredEvents?.length > 0 && (
         <div className="py-8 px-4">
-          <h2 className="text-2xl font-bold text-center mb-6">Événements à venir</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">Ã‰vÃ©nements Ã  venir</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
             {data.featuredEvents.map(event => (
               <div key={event._id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow transition">
@@ -88,7 +88,7 @@ export default async function HomePage() {
                   <p className="text-xs text-stone-500">{new Date(event.publishedAt).toLocaleDateString()}</p>
                   <h3 className="font-bold text-md">{event.title}</h3>
                   <p className="text-sm text-stone-600 line-clamp-2">{event.excerpt}</p>
-                  <Link href={`/actualites/${event.slug}`} className="text-[#772a1d] text-sm font-semibold">Lire →</Link>
+                  <Link href={`/actualites/${event.slug}`} className="text-[#772a1d] text-sm font-semibold">Lire â†’</Link>
                 </div>
               </div>
             ))}
