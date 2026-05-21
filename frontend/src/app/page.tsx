@@ -5,15 +5,18 @@ import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-function getEmbedUrl(url: string | null | undefined): string | null {
+// Fonction pour convertir une URL YouTube en format embed
+function getYouTubeEmbedUrl(url: string | null | undefined): string | null {
   if (!url) return null
-  // Convertir les URLs youtube.com/watch?v=... en embed
-  if (url.includes('youtube.com/watch')) {
-    const videoId = url.split('v=')[1]?.split('&')[0]
-    if (videoId) return `https://www.youtube.com/embed/${videoId}`
+  // Si c'est déjà une URL embed, on la retourne
+  if (url.includes('/embed/')) return url
+  // Extraire l'ID de la vidéo
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/
+  const match = url.match(regex)
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}`
   }
-  // Si déjà une URL embed ou autre plateforme, retourner telle quelle
-  return url
+  return null
 }
 
 async function getAccueil() {
@@ -60,58 +63,52 @@ async function getAccueil() {
       }
     }`
     const data = await client.fetch(query)
-    console.log("[HOME] Données reçues :", data)
+    console.log("Accueil data reçue:", data ? "OK" : "null")
     return data
   } catch (err) {
-    console.error("[HOME] Erreur Sanity :", err)
+    console.error("Erreur Sanity:", err)
     return null
   }
 }
 
 export default async function HomePage() {
   const data = await getAccueil()
-  if (!data) return <div className="pt-32 text-center text-stone-800">Aucune donnée d’accueil. Vérifiez le document dans Sanity Studio.</div>
+  if (!data) {
+    return <div className="pt-32 text-center text-stone-800">Aucune donnée d'accueil trouvée. Vérifiez Sanity Studio.</div>
+  }
 
-  const videoEmbedUrl = getEmbedUrl(data.videoUrl)
+  const embedUrl = getYouTubeEmbedUrl(data.videoUrl)
 
   return (
     <div>
-      {/* Hero avec vidéo de fond ou image */}
-      <section className="relative min-h-[85vh] flex items-center justify-center text-white overflow-hidden">
-        {videoEmbedUrl ? (
-          <div className="absolute inset-0 w-full h-full">
+      {/* Hero section avec vidéo en arrière-plan */}
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-stone-800 to-stone-900 text-white overflow-hidden">
+        {embedUrl && (
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
             <iframe
-              src={videoEmbedUrl}
-              className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ opacity: 0.4 }}
+              src={embedUrl}
+              className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-30"
               frameBorder="0"
               allow="autoplay; encrypted-media"
               allowFullScreen
+              title="Vidéo d'accueil"
             />
           </div>
-        ) : data.heroImage ? (
-          <div className="absolute inset-0">
-            <img src={data.heroImage} className="w-full h-full object-cover opacity-30" />
-          </div>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-stone-800 to-stone-900" />
         )}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.heroTitle || 'CFP SEDHIOU'}</h1>
-          <p className="text-xl md:text-2xl mb-8 drop-shadow">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-block bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition shadow-lg">
-            Découvrir nos formations →
-          </Link>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-4">{data.heroTitle || 'CFP SEDHIOU'}</h1>
+          <p className="text-xl md:text-2xl mb-8">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
+          <Link href="/formations" className="bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">Découvrir nos formations →</Link>
         </div>
       </section>
 
-      {/* Message du Directeur */}
+      {/* Message du Directeur avec photo */}
       {data.directorMessage?.content && (
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden md:flex">
             {data.directorMessage.image && (
               <div className="md:w-1/3 h-64 md:h-auto overflow-hidden">
-                <img src={data.directorMessage.image} className="w-full h-full object-cover" />
+                <img src={data.directorMessage.image} alt="Directeur" className="w-full h-full object-cover" />
               </div>
             )}
             <div className="p-8 md:w-2/3">
@@ -123,13 +120,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Message du responsable CAI */}
+      {/* Message du responsable CAI avec photo */}
       {data.caiMessage?.content && (
         <section className="container mx-auto px-4 py-16 bg-stone-50">
           <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden md:flex flex-row-reverse">
             {data.caiMessage.image && (
               <div className="md:w-1/3 h-64 md:h-auto overflow-hidden">
-                <img src={data.caiMessage.image} className="w-full h-full object-cover" />
+                <img src={data.caiMessage.image} alt="Responsable CAI" className="w-full h-full object-cover" />
               </div>
             )}
             <div className="p-8 md:w-2/3">
