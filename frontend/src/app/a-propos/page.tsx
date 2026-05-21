@@ -6,29 +6,35 @@ import Image from 'next/image'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+// Types
 interface Stat { value: string; label: string }
 interface Value { icon: string; title: string; description: string }
 interface TeamMember { name: string; role: string; image?: { asset?: { url: string } } }
-interface TimelineItem { year: string; title: string; description: string; image?: { asset?: { url: string } } }
-interface Partner { name: string; logo?: { asset?: { url: string } }; website?: string; description?: string }
-interface FAQItem { question: string; answer: string }
+interface TimelineItem { year: string; title: string; description: string }
+interface Partner { name: string; logo?: { asset?: { url: string } }; url?: string }
+interface FaqItem { question: string; answer: string }
 
 async function getAPropos() {
-  const query = `*[_type == "aPropos"][0]{
-    heroTitle,
-    heroSubtitle,
-    mission,
-    vision,
-    stats,
-    values,
-    team,
-    timeline,
-    partners,
-    faq,
-    ctaTitle,
-    ctaLink
-  }`
-  return await client.fetch(query)
+  try {
+    const query = `*[_type == "aPropos"][0]{
+      heroTitle,
+      heroSubtitle,
+      mission,
+      vision,
+      stats,
+      values,
+      team,
+      timeline,
+      partners,
+      faq,
+      ctaTitle,
+      ctaLink
+    }`
+    return await client.fetch(query)
+  } catch (error) {
+    console.error("Erreur chargement à propos:", error)
+    return null
+  }
 }
 
 export default async function AProposPage() {
@@ -52,6 +58,22 @@ export default async function AProposPage() {
             {data.vision && <PortableText value={data.vision} />}
           </div>
         </div>
+
+        {/* Timeline / Histoire */}
+        {data.timeline && data.timeline.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre histoire</h2>
+            <div className="relative border-l-4 border-[#772a1d] ml-4 pl-6 space-y-8">
+              {data.timeline.map((item: TimelineItem, idx: number) => (
+                <div key={idx}>
+                  <div className="absolute w-3 h-3 bg-[#772a1d] rounded-full -left-[1.9rem] mt-2"></div>
+                  <h3 className="text-xl font-bold text-[#772a1d]">{item.year} - {item.title}</h3>
+                  <p className="text-stone-700 mt-1">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Statistiques */}
         {data.stats && data.stats.length > 0 && (
@@ -86,32 +108,15 @@ export default async function AProposPage() {
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre équipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {data.team.map((m: TeamMember, i: number) => (
+              {data.team.map((member: TeamMember, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-stone-200 flex items-center justify-center text-4xl mb-4">
-                    {m.image?.asset?.url ? <img src={m.image.asset.url} alt={m.name} className="w-full h-full object-cover" /> : '👤'}
+                    {member.image?.asset?.url ? (
+                      <img src={member.image.asset.url} alt={member.name} className="w-full h-full object-cover" />
+                    ) : '👤'}
                   </div>
-                  <h3 className="font-bold text-lg text-stone-800">{m.name}</h3>
-                  <p className="text-stone-500 text-sm">{m.role}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Chronologie / Histoire */}
-        {data.timeline && data.timeline.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre histoire</h2>
-            <div className="space-y-6">
-              {data.timeline.map((item: TimelineItem, i: number) => (
-                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md flex flex-col md:flex-row gap-6">
-                  {item.image?.asset?.url && <img src={item.image.asset.url} className="w-full md:w-48 h-32 object-cover rounded-lg" />}
-                  <div>
-                    <div className="text-xl font-bold text-[#772a1d]">{item.year}</div>
-                    <h3 className="text-xl font-bold text-stone-800">{item.title}</h3>
-                    <p className="text-stone-600">{item.description}</p>
-                  </div>
+                  <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
+                  <p className="text-stone-500 text-sm">{member.role}</p>
                 </div>
               ))}
             </div>
@@ -122,14 +127,15 @@ export default async function AProposPage() {
         {data.partners && data.partners.length > 0 && (
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Nos partenaires</h2>
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {data.partners.map((p: Partner, i: number) => (
-                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-md">
-                  {p.logo?.asset?.url && <img src={p.logo.asset.url} className="h-16 mx-auto mb-3 object-contain" />}
-                  <h3 className="font-bold text-stone-800">{p.name}</h3>
-                  {p.website && <a href={p.website} target="_blank" className="text-sm text-[#772a1d] hover:underline">Site web</a>}
-                  {p.description && <p className="text-stone-600 text-sm mt-2">{p.description}</p>}
-                </div>
+            <div className="flex flex-wrap justify-center gap-8">
+              {data.partners.map((partner: Partner, i: number) => (
+                <a key={i} href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="block p-4 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition">
+                  {partner.logo?.asset?.url ? (
+                    <img src={partner.logo.asset.url} alt={partner.name} className="h-16 w-auto object-contain" />
+                  ) : (
+                    <span className="text-stone-700 font-semibold">{partner.name}</span>
+                  )}
+                </a>
               ))}
             </div>
           </div>
@@ -138,12 +144,12 @@ export default async function AProposPage() {
         {/* FAQ */}
         {data.faq && data.faq.length > 0 && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Foire aux questions</h2>
+            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Questions fréquentes</h2>
             <div className="space-y-4">
-              {data.faq.map((item: FAQItem, i: number) => (
+              {data.faq.map((item: FaqItem, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md">
-                  <h3 className="text-xl font-bold text-stone-800 mb-2">❓ {item.question}</h3>
-                  <p className="text-stone-600">{item.answer}</p>
+                  <h3 className="text-xl font-bold text-[#772a1d] mb-2">{item.question}</h3>
+                  <p className="text-stone-700">{item.answer}</p>
                 </div>
               ))}
             </div>
