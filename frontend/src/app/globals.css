@@ -4,8 +4,8 @@
 
 @layer base {
   body {
-    background-color: #2d2a24;
-    color: #2d2a24;
+    background-color: #ffffff;
+    color: #1f2937;
     font-family: 'Inter', system-ui, sans-serif;
   }
   h1, h2, h3, h4 {
