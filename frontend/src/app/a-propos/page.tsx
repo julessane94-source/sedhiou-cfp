@@ -2,12 +2,19 @@ import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
+interface Message {
+  title: string
+  author: string
+  content: any
+  image?: string
+  signature?: string
+}
 interface Stat { value: string; label: string }
 interface Value { icon: string; title: string; description: string }
-interface TeamMember { name: string; role: string; imageUrl?: string }
+interface TeamMember { name: string; role: string; image?: string }
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 async function getAPropos() {
   try {
@@ -16,12 +23,19 @@ async function getAPropos() {
       heroSubtitle,
       mission,
       vision,
+      messages[]{
+        title,
+        author,
+        content,
+        "image": image.asset->url,
+        signature
+      },
       stats,
       values,
       team[]{
         name,
         role,
-        "imageUrl": image.asset->url
+        "image": image.asset->url
       },
       ctaTitle,
       ctaLink
@@ -54,6 +68,26 @@ export default async function AProposPage() {
           </div>
         </div>
 
+        {data.messages && data.messages.length > 0 && (
+          <div className="mb-16 space-y-12">
+            {data.messages.map((msg: Message, idx: number) => (
+              <div key={idx} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md md:flex gap-6">
+                {msg.image && (
+                  <div className="md:w-1/4 flex justify-center">
+                    <img src={msg.image} className="w-32 h-32 rounded-full object-cover" />
+                  </div>
+                )}
+                <div className="md:w-3/4">
+                  <h3 className="text-2xl font-bold text-stone-800">{msg.title}</h3>
+                  <p className="text-stone-500 text-sm mb-2">{msg.author}</p>
+                  <div className="prose prose-stone"><PortableText value={msg.content} /></div>
+                  {msg.signature && <p className="mt-2 italic text-stone-600">{msg.signature}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {data.stats && data.stats.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
             {data.stats.map((s: Stat, i: number) => (
@@ -84,17 +118,13 @@ export default async function AProposPage() {
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre équipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {data.team.map((member: TeamMember, i: number) => (
+              {data.team.map((m: TeamMember, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-stone-200 flex items-center justify-center text-4xl mb-4">
-                    {member.imageUrl ? (
-                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
-                    ) : (
-                      '👤'
-                    )}
+                    {m.image ? <img src={m.image} className="w-full h-full object-cover" /> : '👤'}
                   </div>
-                  <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
-                  <p className="text-stone-500 text-sm">{member.role}</p>
+                  <h3 className="font-bold text-lg text-stone-800">{m.name}</h3>
+                  <p className="text-stone-500 text-sm">{m.role}</p>
                 </div>
               ))}
             </div>
