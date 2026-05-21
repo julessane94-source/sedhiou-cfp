@@ -10,7 +10,8 @@ async function getSiteSettings() {
       instagramUrl,
       linkedinUrl,
       twitterUrl,
-      whatsappNumber
+      whatsappNumber,
+      "logoUrl": logo.asset->url
     }`
     return await client.fetch(query)
   } catch (e) { return null }
@@ -23,7 +24,11 @@ export default async function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold text-white mb-3">CFP SEDHIOU</h3>
+            {social?.logoUrl ? (
+              <img src={social.logoUrl} alt="CFP SEDHIOU" className="h-12 mb-3" />
+            ) : (
+              <h3 className="text-xl font-bold text-white mb-3">CFP SEDHIOU</h3>
+            )}
             <p className="text-sm">Centre de Formation Professionnelle de Sédhiou – Excellence et insertion.</p>
           </div>
           <div>
