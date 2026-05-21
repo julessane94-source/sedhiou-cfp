@@ -57,20 +57,65 @@ async function getAccueil() {
   }
 }
 
+function getEmbedUrl(url) {
+  if (!url) return null
+  // Convertir les URLs youtube.com/watch?v=... en embed
+  let embedUrl = url
+  if (url.includes('youtube.com/watch')) {
+    const videoId = url.split('v=')[1]?.split('&')[0]
+    if (videoId) embedUrl = `https://www.youtube.com/embed/${videoId}`
+  } else if (url.includes('youtu.be/')) {
+    const videoId = url.split('youtu.be/')[1]?.split('?')[0]
+    if (videoId) embedUrl = `https://www.youtube.com/embed/${videoId}`
+  }
+  return embedUrl
+}
+
 export default async function HomePage() {
   const data = await getAccueil()
   if (!data) return <div className="pt-32 text-center text-stone-800">Aucune donnée d’accueil. Vérifiez le document dans Sanity Studio.</div>
+
+  const videoEmbedUrl = getEmbedUrl(data.videoUrl)
 
   return (
     <div>
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-stone-800 to-stone-900 text-white">
+        {videoEmbedUrl && (
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
+            <iframe
+              src={videoEmbedUrl}
+              className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-30"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
+          </div>
+        )}
         <div className="relative z-10 text-center px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-4">{data.heroTitle || 'CFP SEDHIOU'}</h1>
           <p className="text-xl md:text-2xl mb-8">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
           <Link href="/formations" className="bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100">Découvrir nos formations →</Link>
         </div>
       </section>
+
+      {/* Vidéo de présentation (si présente) */}
+      {videoEmbedUrl && (
+        <section className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-stone-800 mb-8">Vidéo de présentation</h2>
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                src={videoEmbedUrl}
+                className="w-full h-full rounded-xl shadow-lg"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Message du Directeur */}
       {data.directorMessage?.content && (
@@ -90,7 +135,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Message du responsable CAI */}
+      {/* Message CAI */}
       {data.caiMessage?.content && (
         <section className="container mx-auto px-4 py-16 bg-stone-50">
           <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden md:flex flex-row-reverse">
@@ -100,7 +145,7 @@ export default async function HomePage() {
               </div>
             )}
             <div className="p-8 md:w-2/3">
-              <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
+              <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.caiMessage.title || 'Mot du responsable CAI'}</h2>
               <div className="prose prose-stone"><PortableText value={data.caiMessage.content} /></div>
               {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
             </div>
@@ -108,7 +153,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Événements en vedette */}
+      {/* Événements */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="container mx-auto px-4 py-16">
           <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Événements à venir</h2>
@@ -128,7 +173,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Formations en vedette */}
+      {/* Formations vedette */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="bg-stone-100 py-16">
           <div className="container mx-auto px-4">
@@ -149,7 +194,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Statistiques */}
+      {/* Stats */}
       {data.stats && data.stats.length > 0 && (
         <div className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -172,14 +217,6 @@ export default async function HomePage() {
               Je m'inscris
             </Link>
           </div>
-        </div>
-      )}
-
-      {/* Message si aucune section personnalisée n'est remplie */}
-      {!data.directorMessage?.content && !data.caiMessage?.content && !data.featuredEvents?.length && !data.featuredFormations?.length && !data.stats?.length && !data.bottomCta && (
-        <div className="container mx-auto px-4 py-16 text-center text-stone-600">
-          <p>Les sections personnalisées (messages, événements, formations en vedette, statistiques, appel à l'action) sont vides.</p>
-          <p>Connectez-vous à Sanity Studio pour les enrichir.</p>
         </div>
       )}
     </div>
