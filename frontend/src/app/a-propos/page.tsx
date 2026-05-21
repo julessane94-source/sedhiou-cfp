@@ -46,7 +46,7 @@ async function getAPropos() {
     console.log("Team data:", data?.team)
     return data
   } catch (error) {
-    console.error("Erreur chargement à propos:", error)
+    console.error("Erreur chargement Ã  propos:", error)
     return null
   }
 }
@@ -56,7 +56,7 @@ export default async function AProposPage() {
   if (!data) return <div className="pt-32 text-center">Chargement...</div>
 
   return (
-    <div className="pt-32 pb-20 px-4 min-h-screen" style={{ backgroundColor: '#d6bfbb' }}>
+    <div className="pt-32 pb-20 px-4 " style={{ backgroundColor: '#d6bfbb' }}>
       <div className="max-w-5xl mx-auto">
         <h1 className="text-5xl font-bold text-center text-stone-800 mb-6">{data.heroTitle}</h1>
         <p className="text-center text-stone-600 mb-12">{data.heroSubtitle}</p>
@@ -117,10 +117,10 @@ export default async function AProposPage() {
           </div>
         )}
 
-        {/* Équipe */}
+        {/* Ã‰quipe */}
         {data.team && data.team.length > 0 && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre équipe</h2>
+            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre Ã©quipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
               {data.team.map((member: any, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
@@ -128,7 +128,7 @@ export default async function AProposPage() {
                     {member.imageUrl ? (
                       <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
                     ) : (
-                      '👤'
+                      'ðŸ‘¤'
                     )}
                   </div>
                   <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
@@ -160,7 +160,7 @@ export default async function AProposPage() {
         {/* FAQ */}
         {data.faq && data.faq.length > 0 && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Questions fréquentes</h2>
+            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Questions frÃ©quentes</h2>
             <div className="space-y-4">
               {data.faq.map((item: FaqItem, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md">

@@ -30,19 +30,19 @@ async function getActualites(): Promise<Actualite[]> {
     }`
     return await client.fetch(query)
   } catch (error) {
-    console.error("Erreur chargement actualités:", error)
+    console.error("Erreur chargement actualitÃ©s:", error)
     return []
   }
 }
 
 export default async function ActualitesPage() {
   const actualites = await getActualites()
-  if (!actualites.length) return <div className="pt-32 text-center">Aucune actualité pour le moment.</div>
+  if (!actualites.length) return <div className="pt-32 text-center">Aucune actualitÃ© pour le moment.</div>
   return (
-    <div className="pt-32 pb-20 px-4 min-h-screen" style={{ backgroundColor: '#d6bfbb' }}>
+    <div className="pt-32 pb-20 px-4 " style={{ backgroundColor: '#d6bfbb' }}>
       <div className="container mx-auto max-w-5xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-up">Actualités</h1>
-        <p className="text-center text-stone-600 mb-12 animate-fade-up delay-100">Toute l'actualité du centre</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-up">ActualitÃ©s</h1>
+        <p className="text-center text-stone-600 mb-12 animate-fade-up delay-100">Toute l'actualitÃ© du centre</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {actualites.map((act, idx) => (
             <div key={act._id} className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 animate-fade-up" style={{ animationDelay: `${idx * 0.1}s` }}>
