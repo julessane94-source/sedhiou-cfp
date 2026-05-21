@@ -48,7 +48,7 @@ export default async function AppelsPage() {
                 <h2 className="text-2xl font-bold text-stone-800 mb-2">{a.title}</h2>
                 <p className="text-stone-700 mb-4">{a.description}</p>
                 <p className="text-stone-500 text-sm mb-2">Ã°Å¸â€œâ€¦ {new Date(a.deadline).toLocaleDateString()}</p>
-                <p className={`font-semibold ${isOpen ? 'text-green-600' : 'text-red-600'}`}>{isOpen ? 'Ã¢Å“â€¦ Ouvert' : 'Ã¢ÂÅ’ FermÃƒÂ©'}</p>
+                <p className={`font-semibold ${isOpen ? 'text-green-600' : 'text-red-600'}`}>{isOpen ? 'âÅ“â€¦ Ouvert' : 'âÂÅ’ FermÃƒÂ©'}</p>
                 {isOpen && <Link href={`/appels-candidatures/${a.slug}`} className="mt-4 inline-block btn-modern btn-primary">Postuler maintenant</Link>}
               </div>
             )

@@ -27,7 +27,7 @@ export default function InscriptionPage() {
             className="w-full"
             style={{ border: 'none' }}
           >
-            ChargementÃ¢â‚¬Â¦
+            Chargementââ‚¬Â¦
           </iframe>
         </div>
         <div className="text-center mt-6 text-stone-500 text-sm">

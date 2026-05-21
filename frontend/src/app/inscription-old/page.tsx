@@ -49,8 +49,8 @@ export default function InscriptionPage() {
         <form onSubmit={handleSubmit} className="card-glass p-6 md:p-8 space-y-6">
           <div><label className="block font-semibold mb-1">Niveau de formation *</label>
             <select value={niveau} onChange={handleNiveauChange} className="w-full bg-transparent border border-white/30 rounded p-3 text-white">
-              <option value="CAP">CAP (3 ans) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Niveau 4ÃƒÆ’Ã‚Â¨me requis</option>
-              <option value="ATTESTE">ATTESTE (3 ans) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Tout niveau</option>
+              <option value="CAP">CAP (3 ans) ÃƒÂ¢ââ€šÂ¬ââ‚¬Å“ Niveau 4ÃƒÆ’Ã‚Â¨me requis</option>
+              <option value="ATTESTE">ATTESTE (3 ans) ÃƒÂ¢ââ€šÂ¬ââ‚¬Å“ Tout niveau</option>
               <option value="BT" disabled>BT (BientÃƒÆ’Ã‚Â´t disponible)</option>
             </select>
           </div>
