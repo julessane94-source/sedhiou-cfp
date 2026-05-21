@@ -64,16 +64,14 @@ export default async function HomePage() {
 
   return (
     <div className="overflow-x-hidden">
-      {/* HERO SECTION avec animation */}
+      {/* HERO */}
       <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-stone-800 to-stone-900 text-white overflow-hidden">
         {data.videoUrl ? (
           <div className="absolute inset-0 w-full h-full overflow-hidden">
             <iframe src={data.videoUrl} className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-30" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen />
           </div>
         ) : data.heroImage ? (
-          <div className="absolute inset-0">
-            <img src={data.heroImage} className="w-full h-full object-cover opacity-30" />
-          </div>
+          <div className="absolute inset-0"><img src={data.heroImage} className="w-full h-full object-cover opacity-30" /></div>
         ) : null}
         <div className="relative z-10 text-center px-4 animate-fade-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-4">{data.heroTitle || 'Bienvenue au CFP SEDHIOU'}</h1>
@@ -82,15 +80,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* MESSAGE DU DIRECTEUR */}
+      {/* DIRECTOR MESSAGE */}
       {data.directorMessage?.content && (
         <section className="container mx-auto px-4 py-20">
           <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden md:flex animate-fade-left">
-            {data.directorMessage.image && (
-              <div className="md:w-1/3 h-64 md:h-auto overflow-hidden">
-                <img src={data.directorMessage.image} className="w-full h-full object-cover" />
-              </div>
-            )}
+            {data.directorMessage.image && <div className="md:w-1/3 h-64 md:h-auto overflow-hidden"><img src={data.directorMessage.image} className="w-full h-full object-cover" /></div>}
             <div className="p-8 md:w-2/3">
               <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.directorMessage.title || 'Mot du Directeur'}</h2>
               <div className="prose prose-stone"><PortableText value={data.directorMessage.content} /></div>
@@ -100,15 +94,11 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* MESSAGE DU RESPONSABLE CAI */}
+      {/* CAI MESSAGE */}
       {data.caiMessage?.content && (
         <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-stone-50 to-transparent">
           <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden md:flex animate-fade-right flex-row-reverse">
-            {data.caiMessage.image && (
-              <div className="md:w-1/3 h-64 md:h-auto overflow-hidden">
-                <img src={data.caiMessage.image} className="w-full h-full object-cover" />
-              </div>
-            )}
+            {data.caiMessage.image && <div className="md:w-1/3 h-64 md:h-auto overflow-hidden"><img src={data.caiMessage.image} className="w-full h-full object-cover" /></div>}
             <div className="p-8 md:w-2/3">
               <h2 className="text-3xl font-bold text-stone-800 mb-4">{data.caiMessage.title || 'Mot du responsable CAI'}</h2>
               <div className="prose prose-stone"><PortableText value={data.caiMessage.content} /></div>
@@ -118,18 +108,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ÉVÉNEMENTS ÉPINGLÉS */}
+      {/* FEATURED EVENTS */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="container mx-auto px-4 py-16">
           <h2 className="text-3xl font-bold text-center text-stone-800 mb-12 animate-fade-up">Événements à venir</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {data.featuredEvents.map((event: FeaturedEvent, idx: number) => (
               <div key={event._id} className="card-glass group hover:scale-[1.02] transition-all duration-500 animate-scale" style={{ animationDelay: `${idx * 0.1}s` }}>
-                {event.coverImage && (
-                  <div className="h-48 overflow-hidden rounded-t-2xl">
-                    <img src={event.coverImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  </div>
-                )}
+                {event.coverImage && <div className="h-48 overflow-hidden rounded-t-2xl"><img src={event.coverImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /></div>}
                 <div className="p-6">
                   <p className="text-sm text-stone-500 mb-1">{new Date(event.publishedAt).toLocaleDateString()}</p>
                   <h3 className="text-xl font-bold text-stone-800 mb-2">{event.title}</h3>
@@ -142,7 +128,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* FORMATIONS EN VEDETTE */}
+      {/* FEATURED FORMATIONS */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="bg-stone-100 py-20">
           <div className="container mx-auto px-4">
@@ -163,7 +149,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* STATISTIQUES */}
+      {/* STATS */}
       {data.stats && data.stats.length > 0 && (
         <section className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
