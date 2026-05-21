@@ -1,9 +1,6 @@
-'use client'
-
 import { client } from '@/lib/sanity/client'
-import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import Accordion from '@/components/Accordion'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -89,32 +86,19 @@ async function getAccueil() {
   }
 }
 
-export default function HomePage() {
-  const [data, setData] = useState<any>(null)
-  const [showDirector, setShowDirector] = useState(false)
-  const [showCai, setShowCai] = useState(false)
-
-  useEffect(() => {
-    getAccueil().then(setData)
-  }, [])
-
+export default async function HomePage() {
+  const data = await getAccueil()
   if (!data) return <div className="pt-32 text-center">Chargement...</div>
 
   const embedUrl = getEmbedUrl(data.videoUrl)
 
   return (
     <div>
-      {/* Hero avec vidéo en premier plan */}
+      {/* Hero section avec vidéo en arrière-plan */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {embedUrl ? (
           <div className="absolute inset-0 w-full h-full z-0">
-            <iframe
-              src={embedUrl}
-              className="w-full h-full object-cover"
-              frameBorder="0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
+            <iframe src={embedUrl} className="w-full h-full object-cover" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen />
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
         ) : (
@@ -125,68 +109,34 @@ export default function HomePage() {
           <p className="text-xl md:text-2xl mb-8 animate-fade-up delay-100">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
           <Link href="/formations" className="inline-block bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
         </div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"><div className="w-6 h-10 border-2 border-white rounded-full flex justify-center"><div className="w-1 h-2 bg-white rounded-full mt-2 animate-scroll"></div></div></div>
       </section>
 
-      {/* Section des messages avec boutons */}
+      {/* Messages (directeur et CAI) avec accordéon */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
         <div className="container mx-auto max-w-5xl">
           {data.directorMessage?.content && (
-            <div className="mb-12 bg-white rounded-2xl shadow-xl overflow-hidden">
-              <button
-                onClick={() => setShowDirector(!showDirector)}
-                className="w-full flex justify-between items-center p-6 text-left bg-[#772a1d] text-white font-bold text-xl hover:bg-[#5c2016] transition"
-              >
-                <span>📢 {data.directorMessage.title || 'Mot du Directeur'}</span>
-                <span>{showDirector ? '▲' : '▼'}</span>
-              </button>
-              {showDirector && (
-                <div className="p-6 flex flex-col md:flex-row gap-8 items-center">
-                  {data.directorMessage.image && (
-                    <div className="md:w-1/3 flex justify-center">
-                      <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-[#772a1d]">
-                        <img src={data.directorMessage.image} className="w-full h-full object-cover" />
-                      </div>
-                    </div>
-                  )}
-                  <div className="md:w-2/3">
-                    <div className="prose prose-stone max-w-none"><PortableText value={data.directorMessage.content} /></div>
-                    {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
+            <Accordion
+              title={data.directorMessage.title || 'Mot du Directeur'}
+              content={data.directorMessage.content}
+              image={data.directorMessage.image}
+              signature={data.directorMessage.signature}
+              buttonColor="#772a1d"
+            />
           )}
-
           {data.caiMessage?.content && (
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <button
-                onClick={() => setShowCai(!showCai)}
-                className="w-full flex justify-between items-center p-6 text-left bg-[#772a1d] text-white font-bold text-xl hover:bg-[#5c2016] transition"
-              >
-                <span>🤝 {data.caiMessage.title || 'Mot de la responsable CAI'}</span>
-                <span>{showCai ? '▲' : '▼'}</span>
-              </button>
-              {showCai && (
-                <div className="p-6 flex flex-col md:flex-row gap-8 items-center">
-                  {data.caiMessage.image && (
-                    <div className="md:w-1/3 flex justify-center">
-                      <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-[#772a1d]">
-                        <img src={data.caiMessage.image} className="w-full h-full object-cover" />
-                      </div>
-                    </div>
-                  )}
-                  <div className="md:w-2/3">
-                    <div className="prose prose-stone max-w-none"><PortableText value={data.caiMessage.content} /></div>
-                    {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
+            <Accordion
+              title={data.caiMessage.title || 'Mot de la responsable CAI'}
+              content={data.caiMessage.content}
+              image={data.caiMessage.image}
+              signature={data.caiMessage.signature}
+              buttonColor="#772a1d"
+            />
           )}
         </div>
       </div>
 
-      {/* Événements vedettes */}
+      {/* Événements en vedette */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
@@ -208,7 +158,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Formations vedettes */}
+      {/* Formations en vedette */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
@@ -243,7 +193,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Call to Action */}
+      {/* Bottom CTA */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
