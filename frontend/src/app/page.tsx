@@ -94,25 +94,31 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero section avec vidéo en arrière-plan */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {embedUrl ? (
-          <div className="absolute inset-0 w-full h-full z-0">
-            <iframe src={embedUrl} className="w-full h-full object-cover" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen />
-            <div className="absolute inset-0 bg-black/40"></div>
+      {/* SECTION VIDÉO EN PREMIER PLAN */}
+      {embedUrl && (
+        <section className="w-full bg-black">
+          <div className="container mx-auto px-4 py-12">
+            <div className="aspect-video w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            </div>
           </div>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-stone-800 to-stone-900 z-0"></div>
-        )}
-        <div className="relative z-10 text-center px-4 text-white">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 animate-fade-up">{data.heroTitle || 'CFP SEDHIOU'}</h1>
-          <p className="text-xl md:text-2xl mb-8 animate-fade-up delay-100">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-block bg-white text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
-        </div>
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"><div className="w-6 h-10 border-2 border-white rounded-full flex justify-center"><div className="w-1 h-2 bg-white rounded-full mt-2 animate-scroll"></div></div></div>
+        </section>
+      )}
+
+      {/* HERO TEXTE (titre + sous-titre + CTA) */}
+      <section className="py-16 px-4 bg-[#d6bfbb] text-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-stone-800 mb-4 animate-fade-up">{data.heroTitle || 'CFP SEDHIOU'}</h1>
+        <p className="text-xl md:text-2xl text-stone-700 mb-8 animate-fade-up delay-100">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
+        <Link href="/formations" className="inline-block bg-[#772a1d] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#5c2016] transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
       </section>
 
-      {/* Messages (directeur et CAI) avec accordéon */}
+      {/* MESSAGES (DIRECTEUR + CAI) AVEC ACCORDÉON */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
         <div className="container mx-auto max-w-5xl">
           {data.directorMessage?.content && (
@@ -136,7 +142,7 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Événements en vedette */}
+      {/* ÉVÉNEMENTS, FORMATIONS, STATS, CTA... (inchangés) */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
@@ -158,7 +164,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Formations en vedette */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
@@ -179,7 +184,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Statistiques */}
       {data.stats && data.stats.length > 0 && (
         <div className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -193,7 +197,6 @@ export default async function HomePage() {
         </div>
       )}
 
-      {/* Bottom CTA */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
