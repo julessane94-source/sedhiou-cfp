@@ -9,9 +9,17 @@ export const revalidate = 0
 // Types
 interface Stat { value: string; label: string }
 interface Value { icon: string; title: string; description: string }
-interface TeamMember { name: string; role: string; image?: { asset?: { url: string } } }
+interface TeamMember { 
+  name: string; 
+  role: string; 
+  image?: { 
+    asset?: { 
+      url?: string 
+    } 
+  } 
+}
 interface TimelineItem { year: string; title: string; description: string }
-interface Partner { name: string; logo?: { asset?: { url: string } }; url?: string }
+interface Partner { name: string; logo?: { asset?: { url?: string } }; url?: string }
 interface FaqItem { question: string; answer: string }
 
 async function getAPropos() {
@@ -23,14 +31,20 @@ async function getAPropos() {
       vision,
       stats,
       values,
-      team,
+      team[]{
+        name,
+        role,
+        "imageUrl": image.asset->url
+      },
       timeline,
       partners,
       faq,
       ctaTitle,
       ctaLink
     }`
-    return await client.fetch(query)
+    const data = await client.fetch(query)
+    console.log("Team data:", data?.team)
+    return data
   } catch (error) {
     console.error("Erreur chargement à propos:", error)
     return null
@@ -108,12 +122,14 @@ export default async function AProposPage() {
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre équipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {data.team.map((member: TeamMember, i: number) => (
+              {data.team.map((member: any, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-stone-200 flex items-center justify-center text-4xl mb-4">
-                    {member.image?.asset?.url ? (
-                      <img src={member.image.asset.url} alt={member.name} className="w-full h-full object-cover" />
-                    ) : '👤'}
+                    {member.imageUrl ? (
+                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
+                    ) : (
+                      '👤'
+                    )}
                   </div>
                   <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
                   <p className="text-stone-500 text-sm">{member.role}</p>
