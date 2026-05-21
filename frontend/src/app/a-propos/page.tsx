@@ -19,7 +19,11 @@ async function getAPropos() {
       vision,
       stats,
       values,
-      team,
+      team[]{
+        name,
+        role,
+        "imageUrl": image.asset->url
+      },
       ctaTitle,
       ctaLink
     }`
@@ -81,17 +85,17 @@ export default async function AProposPage() {
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre équipe</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {data.team.map((m: TeamMember, i: number) => (
+              {data.team.map((member: TeamMember, i: number) => (
                 <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-stone-200 flex items-center justify-center text-4xl mb-4">
-                    {m.image?.asset?.url ? (
-                      <img src={m.image.asset.url} alt={m.name} className="w-full h-full object-cover" />
+                    {member.imageUrl ? (
+                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
                     ) : (
                       '👤'
                     )}
                   </div>
-                  <h3 className="font-bold text-lg text-stone-800">{m.name}</h3>
-                  <p className="text-stone-500 text-sm">{m.role}</p>
+                  <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
+                  <p className="text-stone-500 text-sm">{member.role}</p>
                 </div>
               ))}
             </div>
