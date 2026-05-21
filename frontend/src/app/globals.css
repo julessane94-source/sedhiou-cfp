@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    background-color: #d6bfbb;
+    background-color: #2d2a24;
     color: #2d2a24;
     font-family: 'Inter', system-ui, sans-serif;
   }
@@ -18,15 +18,15 @@
     @apply px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 inline-block text-center;
   }
   .btn-primary {
-    background-color: #772a1d;
+    background-color: #2d2a24;
     color: white;
   }
-  .btn-primary:hover { background-color: #5c2016; }
+  .btn-primary:hover { background-color: #2d2a24; }
   .btn-white {
     background-color: white;
-    color: #772a1d;
+    color: #2d2a24;
   }
-  .btn-white:hover { background-color: #f0f0f0; }
+  .btn-white:hover { background-color: #2d2a24; }
   .card-glass {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(8px);
