@@ -6,11 +6,7 @@ export const dynamic = 'force-dynamic'
 async function getSiteSettings() {
   try {
     const query = `*[_type == "siteSettings"][0]{
-      facebookUrl,
-      instagramUrl,
-      linkedinUrl,
-      twitterUrl,
-      whatsappNumber
+      facebookUrl, instagramUrl, linkedinUrl, twitterUrl, whatsappNumber
     }`
     return await client.fetch(query)
   } catch (e) { return null }
@@ -27,15 +23,13 @@ export default async function Footer() {
             <p className="text-xs">Centre de Formation Professionnelle de Sédhiou</p>
           </div>
           <div className="flex gap-6 text-2xl">
-            {social?.facebookUrl && <a href={social.facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition">📘</a>}
-            {social?.instagramUrl && <a href={social.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition">📷</a>}
-            {social?.linkedinUrl && <a href={social.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition">🔗</a>}
-            {social?.twitterUrl && <a href={social.twitterUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition">🐦</a>}
-            {social?.whatsappNumber && <a href={`https://wa.me/${social.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition">💬</a>}
+            {social?.facebookUrl && <a href={social.facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">📘</a>}
+            {social?.instagramUrl && <a href={social.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">📷</a>}
+            {social?.linkedinUrl && <a href={social.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">🔗</a>}
+            {social?.twitterUrl && <a href={social.twitterUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">🐦</a>}
+            {social?.whatsappNumber && <a href={`https://wa.me/${social.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">💬</a>}
           </div>
-          <div className="text-xs text-center md:text-right">
-            &copy; {new Date().getFullYear()} Tous droits réservés
-          </div>
+          <div className="text-xs text-center md:text-right">&copy; {new Date().getFullYear()} Tous droits réservés</div>
         </div>
       </div>
     </footer>
