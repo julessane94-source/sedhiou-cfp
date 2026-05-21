@@ -1,14 +1,13 @@
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 interface Stat { value: string; label: string }
 interface Value { icon: string; title: string; description: string }
-interface TeamMember { name: string; role: string; image?: { asset?: { url: string } } }
+interface TeamMember { name: string; role: string; imageUrl?: string }
 
 async function getAPropos() {
   try {
