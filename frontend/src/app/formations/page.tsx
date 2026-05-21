@@ -34,23 +34,22 @@ async function getFormations(): Promise<Formation[]> {
 
 export default async function FormationsPage() {
   const formations = await getFormations()
-  if (!formations.length) return <div className="pt-32 text-center text-stone-600">Aucune formation pour le moment.</div>
+  if (!formations.length) return <div className="pt-32 text-center">Aucune formation pour le moment.</div>
   return (
-    <div className="pt-32 pb-20 px-4">
+    <div className="pt-32 pb-20 px-4 min-h-screen" style={{ backgroundColor: '#d6bfbb' }}>
       <div className="container mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-in">Nos Formations</h1>
-        <p className="text-center text-stone-600 mb-12 animate-fade-in delay-100">Des parcours d'excellence pour votre avenir</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-12 animate-fade-in">Nos Formations</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {formations.map((f, i) => (
-            <div key={f._id} className="card-glass p-6 animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+          {formations.map((f, idx) => (
+            <div key={f._id} className="card-light animate-fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
               {f.imageUrl && <img src={f.imageUrl} className="w-full h-48 object-cover rounded-lg mb-4" />}
-              <h2 className="text-xl font-bold text-stone-800 mb-2">{f.title}</h2>
-              <p className="text-stone-600 mb-4">{f.description?.substring(0, 100)}...</p>
-              <div className="flex justify-between text-sm text-stone-500 mb-4">
-                <span>â±ï¸ {f.duration || '3 ans'}</span>
-                <span>ðŸ’° {f.price || 'Sur devis'}</span>
+              <h2 className="text-2xl font-bold text-stone-800 mb-2">{f.title}</h2>
+              <p className="text-stone-700 mb-4">{f.description?.substring(0, 100)}...</p>
+              <div className="flex justify-between text-stone-600 text-sm mb-4">
+                <span>⏱️ {f.duration || '3 ans'}</span>
+                <span>💰 {f.price || 'Sur devis'}</span>
               </div>
-              <Link href={`/formations/${f.slug || f._id}`} className="btn-modern btn-primary inline-block w-full text-center">
+              <Link href={`/formations/${f.slug || f._id}`} className="inline-block bg-[#772a1d] text-white px-4 py-2 rounded-full hover:bg-[#5c2016] transition text-center">
                 En savoir plus
               </Link>
             </div>
