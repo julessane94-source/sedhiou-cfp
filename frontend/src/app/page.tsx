@@ -2,6 +2,7 @@ import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import ImageCarousel from '@/components/ImageCarousel'
+import ChatBotWrapper from '@/components/ChatBotWrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -188,6 +189,9 @@ export default async function HomePage() {
           </div>
         </div>
       )}
+
+      {/* Chatbot Tidiany */}
+      <ChatBotWrapper />
     </div>
   )
 }
