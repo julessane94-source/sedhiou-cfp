@@ -1,5 +1,6 @@
 import { client } from '@/lib/sanity/client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Calendar, Clock } from 'lucide-react'
 
 function normalizeVideoUrl(url?: string) {
@@ -49,19 +50,23 @@ async function getActualites(): Promise<Actualite[]> {
 
 export default async function ActualitesPage() {
   const actualites = await getActualites()
-  if (!actualites.length) return <div className="pt-24 text-center">Aucune actualitÃƒÂ© pour le moment.</div>
+  if (!actualites.length) return <div className="pt-24 text-center">Aucune actualité pour le moment.</div>
   return (
     <div className="pt-24 pb-12 px-4 " style={{ backgroundColor: '#d6bfbb' }}>
       <div className="container mx-auto max-w-5xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-up">ActualitÃƒÂ©s</h1>
-        <p className="text-center text-stone-600 mb-12 animate-fade-up delay-100">Toute l'actualitÃƒÂ© du centre</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-stone-800 mb-4 animate-fade-up">Actualités</h1>
+        <p className="text-center text-stone-600 mb-12 animate-fade-up delay-100">Toute l'actualité du centre</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {actualites.map((act, idx) => (
             <article key={act._id} className="group bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 animate-fade-up" style={{ animationDelay: `${idx * 0.06}s` }}>
               <div className="relative">
                 {act.coverImage && (
-                  <div className="h-56 overflow-hidden bg-gray-100">
-                    <img src={act.coverImage} alt={act.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="relative h-56 bg-gray-100">
+                    <Image src={act.coverImage} alt={act.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                    <Link href={`/actualites/${act.slug}`} className="absolute left-4 bottom-4 inline-flex items-center gap-2 bg-white/90 text-[#772a1d] px-3 py-2 rounded-lg font-semibold shadow-sm">
+                      Voir
+                    </Link>
                   </div>
                 )}
                 {act.videoUrl && (
