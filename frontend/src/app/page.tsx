@@ -61,6 +61,14 @@ export default async function HomePage() {
   const data = await getAccueil()
   if (!data) return <div className="pt-24 text-center">Chargement...</div>
 
+  // Debug logging
+  console.log('🔍 PAGE DATA DEBUG:')
+  console.log('- directorMessage:', data.directorMessage)
+  console.log('- caiMessage:', data.caiMessage)
+  console.log('- videoUrl:', data.videoUrl)
+  console.log('- heroImage:', data.heroImage)
+  console.log('- carouselImages count:', data.carouselImages?.length)
+
   // Rassembler toutes les images du site pour le diaporama
   const collected: string[] = []
   if (data.carouselImages) collected.push(...data.carouselImages.map((img: any) => img.url))
@@ -75,9 +83,9 @@ export default async function HomePage() {
   const carouselImages = uniqueImages
   const embedUrl = getEmbedUrl(data.videoUrl)
 
-  // Préférer la vidéo si elle est fournie, sinon afficher le diaporama
+  // Afficher le diaporama en priorité, sauf si vidéo YouTube valide
   const showVideo = Boolean(embedUrl)
-  const showCarousel = !showVideo && carouselImages.length > 0
+  const showCarousel = carouselImages.length > 0
 
   return (
     <div>

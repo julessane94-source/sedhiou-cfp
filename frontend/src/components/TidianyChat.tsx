@@ -111,7 +111,42 @@ export default function TidianyChat() {
         return "Nous contacter pour plus d'informations sur la direction: +221 77 885 16 91"
       }
     }
-    
+
+    // Questions sur inscription/admission
+    if (q.includes('inscrire') || q.includes('inscription') || q.includes('admission') || q.includes('candidature') || q.includes('comment rejoindre')) {
+      return "Pour vous inscrire au CFP Sédhiou, veuillez :\n1. Consulter la page **Inscriptions** de notre site\n2. Remplir le formulaire d'inscription\n3. Nous envoyer vos documents requis\n4. Attendre la confirmation\n\nVous avez besoin d'aide? Contactez-nous: **+221 77 885 16 91** ou **contact@cfpsedhiou.sn**"
+    }
+
+    // Questions sur la localisation/accès
+    if (q.includes('où') || q.includes('localisation') || q.includes('adresse') || q.includes('comment venir') || q.includes('lieu') || q.includes('situé')) {
+      const groq = `*[_type == "contact"][0] { address, phone, email }`
+      const contact = await client.fetch(groq)
+      if (contact?.address) {
+        return `📍 Nous sommes situés à: **${contact.address}**\n\nÉtapes:\n1. Consultez Google Maps\n2. Appelez-nous pour des indications: **${contact.phone}**\n\n📧 ${contact.email}`
+      }
+      return "Pour connaître notre localisation, veuillez nous appeler au +221 77 885 16 91 ou consulter Google Maps."
+    }
+
+    // Questions sur horaires/disponibilités
+    if (q.includes('horaire') || q.includes('heure') || q.includes('ouvert') || q.includes('fermé') || q.includes('disponib') || q.includes('quand venez')) {
+      return "Pour connaître nos horaires d'ouverture et de formation, veuillez :\n📞 Nous appeler: **+221 77 885 16 91**\n📧 Nous écrire: **contact@cfpsedhiou.sn**\n\nNos horaires peuvent varier selon les formations. Les équipes vous répondront dans les meilleurs délais!"
+    }
+
+    // Questions sur qui sommes-nous / histoire / mission
+    if (q.includes('qui êtes-vous') || q.includes('qui sommes-nous') || q.includes('histoire') || q.includes('mission') || q.includes('vision') || q.includes('présentation') || q.includes('à propos')) {
+      return "Le **CFP Sédhiou** (Centre de Formation Professionnelle) est un établissement de formation professionnelle et technique dédié à l'excellence.\n\n🎯 **Notre mission:** Former les jeunes et adultes pour un avenir professionnel prospère.\n💼 **Nos domaines:** Coiffure, Horlogerie, Cuisine, Couture, Développement local, Santé & Hygiène...\n\nPour plus de détails, visitez notre page **À Propos**"
+    }
+
+    // Questions générales de satisfaction
+    if (q.includes('merci') || q.includes('merci beaucoup') || q.includes('super') || q.includes('bien') || q.includes('ça va')) {
+      const replies = [
+        "De rien! 😊 N'hésitez pas si vous avez d'autres questions.",
+        "Vous êtes bienvenu(e)! 👍 Je suis là pour vous aider.",
+        "Avec plaisir! 🌟 Quoi d'autre?"
+      ]
+      return replies[Math.floor(Math.random() * replies.length)]
+    }
+
     // Détection des intentions
     if (q.includes('formation') || q.includes('cours') || q.includes('filière')) {
       // Chercher des formations
