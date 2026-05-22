@@ -142,58 +142,58 @@ export default function HomePage() {
   )
 
   const heroImage = data.hero?.backgroundImage || '/images/hero-placeholder.svg'
+  const heroCarouselImages = data.hero?.carouselImages || []
+  const hasHeroCarousel = heroCarouselImages.length > 0
+  const heroCtaLink = data.hero?.ctaLink || '/formations'
+  const heroCtaText = data.hero?.ctaText || 'Voir nos formations'
 
   return (
     <div>
-      {/* HERO: fond + media au premier plan */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* background image / fallback */}
-        <div className="absolute inset-0 w-full h-full z-0">
-          <img src={heroImage} className="w-full h-full object-cover" alt="Image par défaut" />
-          <div className="absolute inset-0 bg-black/40"></div>
+      {/* HERO: fond + texte + media organisé */}
+      <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.08),_transparent_35%)]">
+        <div className="absolute inset-0 opacity-60">
+          <img src={heroImage} className="w-full h-full object-cover" alt="Image de fond de la page d'accueil" />
+          <div className="absolute inset-0 bg-slate-950/65 mix-blend-multiply" />
         </div>
-
-        {/* foreground media (video or large image / carousel) */}
-        <div className="relative z-10 w-full flex justify-center px-4">
-          {data.hero?.videoUrl ? (
-            <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-2xl">
-              <iframe
-                src={normalizeVideoUrl(data.hero.videoUrl)}
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                allowFullScreen
-                title="Hero video"
-              />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
+            <div className="space-y-6 text-white text-center lg:text-left">
+              <span className="inline-flex rounded-full bg-[#f7f2ef]/90 text-[#772a1d] px-4 py-2 text-sm font-semibold tracking-[0.18em]">CFP SÉDHIOU</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-lg">{data.hero?.title || 'Formez-vous pour un avenir meilleur'}</h1>
+              <p className="max-w-2xl mx-auto lg:mx-0 text-base sm:text-lg text-slate-100/90">{data.hero?.subtitle || 'Un centre de formation professionnelle engagé pour l’emploi et le développement local.'}</p>
+              <div className="flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-4 mt-6">
+                <Link href={heroCtaLink} className="inline-flex items-center justify-center rounded-full bg-white text-[#772a1d] px-8 py-3 font-semibold shadow-lg hover:bg-slate-100 transition">
+                  {heroCtaText}
+                </Link>
+                <Link href="/inscription" className="inline-flex items-center justify-center rounded-full border border-white/50 bg-white/10 text-white px-8 py-3 font-semibold hover:bg-white/20 transition">
+                  M'inscrire
+                </Link>
+              </div>
             </div>
-          ) : data.hero?.carouselImages && data.hero.carouselImages.length > 0 ? (
-            <div className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl">
-              <ImageCarousel images={data.hero.carouselImages} autoplayInterval={4000} />
-            </div>
-          ) : (
-            <div className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl">
-              <img src={heroImage} className="w-full h-auto object-cover" alt="Hero" />
-            </div>
-          )}
-        </div>
 
-        {/* titre / CTA au-dessus du media */}
-        <div className="relative z-20 text-center px-4 text-white max-w-4xl mt-8 animate-fade-in-up">
-          <h1 className="text-4xl md:text-6xl font-bold mb-3 drop-shadow-lg">{data.hero?.title || 'CFP SEDHIOU'}</h1>
-          <p className="text-lg md:text-xl mb-6 drop-shadow">{data.hero?.subtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <div className="flex items-center justify-center gap-4">
-            <Link href="/formations" className="inline-block bg-white text-[#772a1d] px-7 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
-              Découvrir nos formations →
-            </Link>
-            <Link href="/inscription" className="inline-block bg-white/10 border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/20 transition transform hover:-translate-y-1">
-              M'inscrire
-            </Link>
-          </div>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-2 bg-white rounded-full mt-2 animate-scroll"></div>
+            <div className="mx-auto w-full max-w-3xl">
+              <div className="rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm">
+                {data.hero?.videoUrl ? (
+                  <div className="aspect-video bg-black">
+                    <iframe
+                      src={normalizeVideoUrl(data.hero.videoUrl)}
+                      className="w-full h-full"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                      allowFullScreen
+                      title="Hero video"
+                    />
+                  </div>
+                ) : hasHeroCarousel ? (
+                  <ImageCarousel images={heroCarouselImages} autoplayInterval={4000} />
+                ) : (
+                  <img src={heroImage} className="w-full h-auto object-cover" alt="Hero" />
+                )}
+                {hasHeroCarousel && (
+                  <div className="bg-white/90 p-4 text-sm text-slate-700">Glissez pour voir le diaporama; les images se configurent dans le champ « Images du diaporama » du hero dans Sanity.</div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
