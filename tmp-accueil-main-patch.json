@@ -1,0 +1,58 @@
+{
+    "_createdAt":  "2026-05-19T10:59:00Z",
+    "_id":  "accueil-main",
+    "_rev":  "4jxboK94xJN5bUSrjmZCKm",
+    "_type":  "accueil",
+    "_updatedAt":  "2026-05-19T10:59:00Z",
+    "blocks":  [
+                   {
+                       "_key":  "ze6azmya",
+                       "_type":  "hero",
+                       "backgroundImage":  null,
+                       "buttonLink":  "/formations",
+                       "buttonText":  "Voir formations",
+                       "subtitle":  "Programmes professionnalisants",
+                       "title":  "Formez-vous pour l\u0027avenir"
+                   },
+                   {
+                       "_key":  "8g0l8cgs",
+                       "_type":  "textWithImage",
+                       "image":  null,
+                       "imagePosition":  "right",
+                       "text":  [
+                                    {
+                                        "_key":  "sf23pbe1",
+                                        "_type":  "block",
+                                        "children":  [
+                                                         {
+                                                             "_key":  "587xsgrs",
+                                                             "_type":  "span",
+                                                             "text":  "Une p+®dagogie ax+®e sur la pratique et l\u0027employabilit+®."
+                                                         }
+                                                     ]
+                                    }
+                                ],
+                       "title":  "Notre approche"
+                   },
+                   {
+                       "_key":  "6xn1qtt5",
+                       "_type":  "featuredFormations",
+                       "formations":  [
+
+                                      ],
+                       "maxItems":  4,
+                       "subtitle":  "Choisissez votre parcours",
+                       "title":  "Formations populaires"
+                   }
+               ],
+    "footerCta":  {
+                      "link":  "/inscription",
+                      "text":  "Inscrivez-vous maintenant"
+                  },
+    "seo":  {
+                "metaDescription":  "Centre de formation professionnelle de S+®dhiou",
+                "metaTitle":  "CFP S+®dhiou - Accueil",
+                "ogImage":  null
+            },
+    "title":  "Titre modifié via CLI (test)"
+}

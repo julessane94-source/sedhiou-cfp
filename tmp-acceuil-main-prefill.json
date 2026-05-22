@@ -1,0 +1,32 @@
+{
+    "testimonials":  [
+
+                     ],
+    "heroTitle":  "Formez-vous pour l\u0027avenir",
+    "featuredVideo":  null,
+    "heroImage":  null,
+    "heroVideoUrl":  null,
+    "_type":  "acceuil",
+    "heroSubtitle":  "Programmes professionnalisants",
+    "_id":  "acceuil-main",
+    "sections":  [
+                     {
+                         "mediaType":  "image",
+                         "description":  "Une p+´+¢dagogie ax+´+¢e sur la pratique et l\u0027employabilit+´+¢.",
+                         "videoUrl":  null,
+                         "link":  null,
+                         "image":  null,
+                         "title":  "Notre approche",
+                         "audioUrl":  null
+                     },
+                     {
+                         "mediaType":  "",
+                         "description":  "",
+                         "videoUrl":  null,
+                         "link":  null,
+                         "image":  null,
+                         "title":  "Formations populaires",
+                         "audioUrl":  null
+                     }
+                 ]
+}
