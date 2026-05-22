@@ -1,6 +1,5 @@
 'use client'
 
-import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
@@ -41,29 +40,43 @@ function ImageCarousel({ images }: { images: string[] }) {
 
 async function getAccueil() {
   try {
-    const query = `*[_type == "accueil"][0]{
-      heroTitle,
-      heroSubtitle,
-      videoUrl,
-      heroImage,
-      carouselImages[]{
-        "url": asset->url
-      },
-      directorMessage { title, content, "image": image.asset->url, signature },
-      caiMessage { title, content, "image": image.asset->url, signature },
-      featuredEvents[]->{ _id, title, excerpt, "slug": slug.current, "coverImage": coverImage.asset->url, publishedAt },
-      featuredFormations[]->{ _id, title, description, "slug": slug.current, "imageUrl": image.asset->url },
-      stats[]{ value, label },
-      bottomCta { text, link }
-    }`
-    return await client.fetch(query)
-  } catch (err) { return null }
+    const res = await fetch('/api/accueil')
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      console.error('getAccueil: bad response', res.status, text)
+      return null
+    }
+    return await res.json()
+  } catch (err) {
+    console.error('getAccueil error', err)
+    return null
+  }
 }
 
 export default function HomePage() {
   const [data, setData] = useState<any>(null)
-  useEffect(() => { getAccueil().then(setData) }, [])
-  if (!data) return <div className="pt-24 text-center">Chargement...</div>
+  const [error, setError] = useState<string | null>(null)
+
+  const load = async () => {
+    setError(null)
+    const d = await getAccueil()
+    if (!d) setError('Impossible de charger les données.')
+    setData(d)
+  }
+
+  useEffect(() => { load() }, [])
+  if (!data) return (
+    <div className="pt-24 text-center">
+      {error ? (
+        <div>
+          <div className="mb-4">Erreur: {error}</div>
+          <button className="px-4 py-2 bg-[#772a1d] text-white rounded" onClick={load}>Réessayer</button>
+        </div>
+      ) : (
+        <div>Chargement...</div>
+      )}
+    </div>
+  )
 
   const carouselImages = data.carouselImages?.map((img: any) => img.url) || []
   if (data.heroImage && carouselImages.length === 0) carouselImages.push(data.heroImage)
