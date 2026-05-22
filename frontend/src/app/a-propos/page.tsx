@@ -6,17 +6,16 @@ import Image from 'next/image'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-// Types
 interface Stat { value: string; label: string }
 interface Value { icon: string; title: string; description: string }
-interface TeamMember { 
-  name: string; 
-  role: string; 
-  image?: { 
-    asset?: { 
-      url?: string 
-    } 
-  } 
+interface TeamMember {
+  name: string
+  role: string
+  image?: {
+    asset?: {
+      url?: string
+    }
+  }
 }
 interface TimelineItem { year: string; title: string; description: string }
 interface Partner { name: string; logo?: { asset?: { url?: string } }; url?: string }
@@ -42,11 +41,9 @@ async function getAPropos() {
       ctaTitle,
       ctaLink
     }`
-    const data = await client.fetch(query)
-    console.log("Team data:", data?.team)
-    return data
+    return await client.fetch(query)
   } catch (error) {
-    console.error("Erreur chargement ÃƒÂ  propos:", error)
+    console.error('Erreur chargement à propos:', error)
     return null
   }
 }
@@ -56,125 +53,130 @@ export default async function AProposPage() {
   if (!data) return <div className="pt-24 text-center">Chargement...</div>
 
   return (
-    <div className="pt-24 pb-12 px-4 " style={{ backgroundColor: '#d6bfbb' }}>
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-5xl font-bold text-center text-stone-800 mb-6">{data.heroTitle}</h1>
-        <p className="text-center text-stone-600 mb-12">{data.heroSubtitle}</p>
-
-        {/* Mission & Vision */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md">
-            <h2 className="text-2xl font-bold text-stone-800 mb-4">Mission</h2>
-            {data.mission && <PortableText value={data.mission} />}
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md">
-            <h2 className="text-2xl font-bold text-stone-800 mb-4">Vision</h2>
-            {data.vision && <PortableText value={data.vision} />}
-          </div>
-        </div>
-
-        {/* Timeline / Histoire */}
-        {data.timeline && data.timeline.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre histoire</h2>
-            <div className="relative border-l-4 border-[#772a1d] ml-4 pl-6 space-y-8">
-              {data.timeline.map((item: TimelineItem, idx: number) => (
-                <div key={idx}>
-                  <div className="absolute w-3 h-3 bg-[#772a1d] rounded-full -left-[1.9rem] mt-2"></div>
-                  <h3 className="text-xl font-bold text-[#772a1d]">{item.year} - {item.title}</h3>
-                  <p className="text-stone-700 mt-1">{item.description}</p>
+    <div className="pt-24 pb-20 px-4 bg-[#f7f2ef]">
+      <div className="max-w-7xl mx-auto">
+        <section className="bg-white rounded-[2rem] shadow-[0_24px_80px_rgba(119,42,29,0.12)] overflow-hidden">
+          <div className="grid lg:grid-cols-2 gap-0 lg:gap-10">
+            <div className="p-10 lg:p-16">
+              <p className="uppercase tracking-[0.35em] text-sm text-[#772a1d] mb-6">À propos</p>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 leading-tight mb-6">{data.heroTitle}</h1>
+              <p className="text-stone-700 max-w-2xl leading-8">{data.heroSubtitle}</p>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl bg-[#772a1d] bg-opacity-5 p-5">
+                  <p className="text-3xl font-bold text-[#772a1d]">{data.stats?.[0]?.value || '—'}</p>
+                  <p className="mt-2 text-sm text-stone-600">{data.stats?.[0]?.label || 'Années d’expérience'}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Statistiques */}
-        {data.stats && data.stats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {data.stats.map((s: Stat, i: number) => (
-              <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
-                <div className="text-3xl font-bold text-[#772a1d]">{s.value}</div>
-                <div className="text-stone-600 mt-2">{s.label}</div>
+                <div className="rounded-3xl bg-[#772a1d] bg-opacity-5 p-5">
+                  <p className="text-3xl font-bold text-[#772a1d]">{data.stats?.[1]?.value || '—'}</p>
+                  <p className="mt-2 text-sm text-stone-600">{data.stats?.[1]?.label || 'Étudiants accompagnés'}</p>
+                </div>
               </div>
-            ))}
+            </div>
+            <div className="relative bg-[#772a1d] text-white p-10 lg:p-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_20%)]" />
+              <div className="relative text-center">
+                <h2 className="text-3xl font-bold mb-4">Notre engagement</h2>
+                <p className="text-stone-100 leading-7">Porter un accompagnement réel, structuré et ambitieux pour chaque jeune en formation.</p>
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-3xl bg-white/10 p-5">
+                    <h3 className="text-sm uppercase tracking-[0.24em] text-stone-200">Mission</h3>
+                    <div className="mt-3 text-sm leading-6 text-stone-100">
+                      {data.mission ? <PortableText value={data.mission} /> : 'Créer des opportunités de formation professionnalisantes pour la région.'}
+                    </div>
+                  </div>
+                  <div className="rounded-3xl bg-white/10 p-5">
+                    <h3 className="text-sm uppercase tracking-[0.24em] text-stone-200">Vision</h3>
+                    <div className="mt-3 text-sm leading-6 text-stone-100">
+                      {data.vision ? <PortableText value={data.vision} /> : 'Devenir un centre de référence où compétences et confiance grandissent ensemble.'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </section>
 
-        {/* Valeurs */}
         {data.values && data.values.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Nos valeurs</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+          <section className="mt-16">
+            <div className="text-center mb-12">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#772a1d] mb-3">Valeurs</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-stone-900">Ce qui nous guide</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
               {data.values.map((v: Value, i: number) => (
-                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
-                  <div className="text-5xl mb-3">{v.icon}</div>
-                  <h3 className="text-xl font-bold text-stone-800 mb-2">{v.title}</h3>
-                  <p className="text-stone-600">{v.description}</p>
+                <div key={i} className="rounded-[2rem] bg-white p-8 shadow-lg border border-stone-200">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#772a1d] text-white text-3xl mb-6">{v.icon || '•'}</div>
+                  <h3 className="text-xl font-semibold text-stone-900 mb-3">{v.title}</h3>
+                  <p className="text-stone-600 leading-7">{v.description}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Ãƒâ€°quipe */}
         {data.team && data.team.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Notre ÃƒÂ©quipe</h2>
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <section className="mt-16">
+            <div className="text-center mb-12">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#772a1d] mb-3">Équipe</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-stone-900">Les responsables</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {data.team.map((member: any, i: number) => (
-                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center shadow-md">
-                  <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-stone-200 flex items-center justify-center text-4xl mb-4">
+                <div key={i} className="rounded-[2rem] bg-white p-6 shadow-lg border border-stone-200 text-center">
+                  <div className="mx-auto mb-5 h-32 w-32 rounded-full overflow-hidden bg-stone-100 flex items-center justify-center">
                     {member.imageUrl ? (
-                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
+                      <Image src={member.imageUrl} alt={member.name} width={160} height={160} className="h-full w-full object-cover" />
                     ) : (
-                      'Ã°Å¸â€˜Â¤'
+                      <span className="text-4xl text-stone-400">👤</span>
                     )}
                   </div>
-                  <h3 className="font-bold text-lg text-stone-800">{member.name}</h3>
-                  <p className="text-stone-500 text-sm">{member.role}</p>
+                  <h3 className="text-xl font-semibold text-stone-900">{member.name}</h3>
+                  <p className="mt-2 text-sm text-stone-500">{member.role}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Partenaires */}
         {data.partners && data.partners.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Nos partenaires</h2>
-            <div className="flex flex-wrap justify-center gap-8">
+          <section className="mt-16">
+            <div className="text-center mb-12">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#772a1d] mb-3">Partenaires</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-stone-900">Ils nous soutiennent</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
               {data.partners.map((partner: Partner, i: number) => (
-                <a key={i} href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="block p-4 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition">
+                <a key={i} href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="rounded-3xl bg-white p-6 shadow-sm border border-stone-200 flex items-center justify-center h-32">
                   {partner.logo?.asset?.url ? (
-                    <img src={partner.logo.asset.url} alt={partner.name} className="h-16 w-auto object-contain" />
+                    <img src={partner.logo.asset.url} alt={partner.name} className="h-16 object-contain" />
                   ) : (
-                    <span className="text-stone-700 font-semibold">{partner.name}</span>
+                    <span className="font-semibold text-stone-700">{partner.name}</span>
                   )}
                 </a>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* FAQ */}
         {data.faq && data.faq.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-stone-800 mb-10">Questions frÃƒÂ©quentes</h2>
-            <div className="space-y-4">
+          <section className="mt-16">
+            <div className="text-center mb-12">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#772a1d] mb-3">FAQ</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-stone-900">Questions fréquentes</h2>
+            </div>
+            <div className="grid gap-4">
               {data.faq.map((item: FaqItem, i: number) => (
-                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md">
-                  <h3 className="text-xl font-bold text-[#772a1d] mb-2">{item.question}</h3>
-                  <p className="text-stone-700">{item.answer}</p>
+                <div key={i} className="rounded-[2rem] bg-white p-8 shadow-lg border border-stone-200">
+                  <h3 className="text-xl font-semibold text-[#772a1d] mb-3">{item.question}</h3>
+                  <p className="text-stone-600 leading-7">{item.answer}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* CTA */}
-        <div className="text-center">
-          <Link href={data.ctaLink || '/inscription'} className="inline-block bg-[#772a1d] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#5c2016] transition">
+        <div className="mt-20 text-center">
+          <Link href={data.ctaLink || '/inscription'} className="inline-flex items-center justify-center rounded-full bg-[#772a1d] px-10 py-4 text-white text-base font-semibold hover:bg-[#5c2016] transition">
             {data.ctaTitle || 'Rejoignez-nous'}
           </Link>
         </div>
