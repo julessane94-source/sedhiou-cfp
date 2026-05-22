@@ -5,9 +5,6 @@ import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 // Composant Carrousel simple
 function ImageCarousel({ images }: { images: string[] }) {
   const [current, setCurrent] = useState(0)
