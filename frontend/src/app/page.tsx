@@ -95,7 +95,10 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-stone-800 to-stone-900 z-0"></div>
+          <div className="absolute inset-0 w-full h-full z-0">
+            <img src="/images/hero-placeholder.svg" className="w-full h-full object-cover" alt="Image par défaut" />
+            <div className="absolute inset-0 bg-black/30"></div>
+          </div>
         )}
         <div className="relative z-10 text-center px-4 text-white max-w-4xl animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.heroTitle || 'CFP SEDHIOU'}</h1>
@@ -120,9 +123,7 @@ export default function HomePage() {
           {data.directorMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 hover:shadow-2xl transition animate-fade-in-up">
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                {data.directorMessage.image && (
-                  <img src={data.directorMessage.image} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" />
-                )}
+                <img src={data.directorMessage.image || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Directeur" />
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-2">{data.directorMessage.title || 'Mot du Directeur'}</h2>
                   <div className="prose prose-stone max-w-none"><PortableText value={data.directorMessage.content} /></div>
@@ -134,9 +135,7 @@ export default function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 hover:shadow-2xl transition animate-fade-in-up animation-delay-200">
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                {data.caiMessage.image && (
-                  <img src={data.caiMessage.image} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" />
-                )}
+                <img src={data.caiMessage.image || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Responsable CAI" />
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-2">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
                   <div className="prose prose-stone max-w-none"><PortableText value={data.caiMessage.content} /></div>
