@@ -1,4 +1,4 @@
-import ChatBot from '@/components/ChatBot'
+import TidianyChat from '@/components/TidianyChat'\nimport ChatBot from '@/components/ChatBot'
 import { client } from '@/lib/sanity/client'
 import Link from 'next/link'
 
@@ -35,30 +35,30 @@ export default async function ContactPage() {
         <div className="text-center mb-14">
           <p className="text-sm uppercase tracking-[0.3em] text-[#772a1d] mb-3">Contact</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900">{contact?.title || 'Contactez-nous'}</h1>
-          <p className="mt-4 text-stone-600 max-w-2xl mx-auto">{contact?.subtitle || 'Nous sommes lÃ  pour rÃ©pondre Ã  vos questions et vous accompagner dans votre projet de formation.'}</p>
+          <p className="mt-4 text-stone-600 max-w-2xl mx-auto">{contact?.subtitle || 'Nous sommes lÃƒÂ  pour rÃƒÂ©pondre ÃƒÂ  vos questions et vous accompagner dans votre projet de formation.'}</p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5 bg-white rounded-[2rem] p-8 shadow-xl border border-white/80">
             <div className="space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-stone-900 mb-3">CoordonnÃ©es</h2>
+                <h2 className="text-2xl font-bold text-stone-900 mb-3">CoordonnÃƒÂ©es</h2>
                 <div className="space-y-4 text-stone-700">
                   <div className="flex items-start gap-4">
-                    <span className="mt-1 text-[#772a1d]">ðŸ“</span>
-                    <p>{contact?.address || 'Adresse non renseignÃ©e'}</p>
+                    <span className="mt-1 text-[#772a1d]">Ã°Å¸â€œÂ</span>
+                    <p>{contact?.address || 'Adresse non renseignÃƒÂ©e'}</p>
                   </div>
                   <div className="flex items-start gap-4">
-                    <span className="mt-1 text-[#772a1d]">ðŸ“ž</span>
-                    <p>{contact?.phone || 'TÃ©lÃ©phone non renseignÃ©'}</p>
+                    <span className="mt-1 text-[#772a1d]">Ã°Å¸â€œÅ¾</span>
+                    <p>{contact?.phone || 'TÃƒÂ©lÃƒÂ©phone non renseignÃƒÂ©'}</p>
                   </div>
                   <div className="flex items-start gap-4">
-                    <span className="mt-1 text-[#772a1d]">âœ‰ï¸</span>
-                    <p>{contact?.email || 'Email non renseignÃ©'}</p>
+                    <span className="mt-1 text-[#772a1d]">Ã¢Å“â€°Ã¯Â¸Â</span>
+                    <p>{contact?.email || 'Email non renseignÃƒÂ©'}</p>
                   </div>
                   <div className="flex items-start gap-4">
-                    <span className="mt-1 text-[#772a1d]">ðŸ•’</span>
-                    <p>{contact?.hours || 'Heures non renseignÃ©es'}</p>
+                    <span className="mt-1 text-[#772a1d]">Ã°Å¸â€¢â€™</span>
+                    <p>{contact?.hours || 'Heures non renseignÃƒÂ©es'}</p>
                   </div>
                 </div>
               </div>
@@ -120,7 +120,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
                 )}
-              </div>
+              \n      <TidianyChat /></div>
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export default async function ContactPage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.15),_transparent_35%)] pointer-events-none" />
             <div className="relative space-y-6">
               <h2 className="text-3xl font-bold">Envoyez-nous un message</h2>
-              <p className="max-w-xl text-stone-100">Remplissez ce formulaire et notre Ã©quipe vous rÃ©pondra rapidement.</p>
+              <p className="max-w-xl text-stone-100">Remplissez ce formulaire et notre ÃƒÂ©quipe vous rÃƒÂ©pondra rapidement.</p>
               <form action="/api/contact" method="POST" className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <input type="text" name="name" placeholder="Votre nom" className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder:text-stone-300 focus:outline-none focus:ring-2 focus:ring-[#f7d3ca]" />
@@ -143,4 +143,4 @@ export default async function ContactPage() {
       </div>
     </div>
   )
-}
+}\n      <TidianyChat />
