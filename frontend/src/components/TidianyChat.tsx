@@ -86,9 +86,20 @@ export default function TidianyChat() {
   async function smartSearch(question: string): Promise<string | null> {
     const q = question.toLowerCase()
     
-    // Détection des salutations
+    // Détection des salutations et messages simples
     if (q.includes('bonjour') || q.includes('salut') || q.includes('coucou') || q.includes('allo') || q.includes('hey')) {
-      return "Bonjour! 👋 Je suis Tidiany, votre assistant virtuel. Comment puis-je vous aider aujourd'hui? Vous pouvez me poser des questions sur nos formations, actualités, appels à candidatures, tarifs, ou toute autre information!"
+      return "Bonjour! 👋 Je suis Tidiany, votre assistant virtuel. Comment puis-je vous aider aujourd'hui? Vous pouvez me poser des questions sur nos formations, actualités, appels à candidatures, tarifs, ou toute autre information."
+    }
+    if (q.includes('ça va') || q.includes('comment ça va') || q.includes('comment vas-tu') || q.includes('ça roule') || q.includes('comment allez-vous')) {
+      const replies = [
+        "Ça va très bien, merci! 😊 Et vous?",
+        "Je vais bien, prêt à vous aider. Que voulez-vous savoir?",
+        "Tout va bien ici! En quoi puis-je vous aider aujourd'hui?"
+      ]
+      return replies[Math.floor(Math.random() * replies.length)]
+    }
+    if (q.includes('qui es tu') || q.includes('qui es-tu') || q.includes('tu es qui') || q.includes('c est qui') || q.includes('ton nom')) {
+      return "Je suis Tidiany, l'assistant virtuel du CFP Sédhiou. Je peux vous aider à trouver des informations sur nos formations, nos actualités, les appels à candidatures, les tarifs et plus encore."
     }
 
     // Détection des questions sur le directeur
@@ -148,31 +159,24 @@ export default function TidianyChat() {
     }
 
     // Détection des intentions
-    if (q.includes('formation') || q.includes('cours') || q.includes('filière')) {
-      // Chercher des formations
-      let searchTerm = ''
-      if (q.includes('coiffure')) searchTerm = 'coiffure'
-      else if (q.includes('coiffeur')) searchTerm = 'coiffeur'
-      else if (q.includes('horticulteur')) searchTerm = 'horticulteur'
-      else if (q.includes('cuisine')) searchTerm = 'cuisinier'
-      else if (q.includes('couture')) searchTerm = 'couturier'
-      else if (q.includes('développement local')) searchTerm = 'développement local'
-      else if (q.includes('santé')) searchTerm = 'santé hygiène'
-      // Si aucun mot-clé spécifique, on liste les formations
-      let groq = `*[_type == "formation"] | order(_createdAt desc) [0...3] { title, description, price, duration }`
-      if (searchTerm) {
-        groq = `*[_type == "formation" && (title match "${searchTerm}*" || description match "${searchTerm}*")] { title, description, price, duration }`
+    if (q.includes('formation') || q.includes('cours') || q.includes('filière') || q.includes('filières') || q.includes('branche') || q.includes('domaines')) {
+      try {
+        const groq = `*[_type == "formation"] { title, description, price, duration }`
+        const results = await client.fetch(groq)
+        if (results && results.length > 0) {
+          let reply = `Voici quelques filières proposées au CFP Sédhiou :\n`
+          results.slice(0, 5).forEach((f: Formation) => {
+            reply += `- ${f.title} : ${f.description?.substring(0, 80) ?? 'Description non disponible'}... (durée: ${f.duration || 'sur demande'}, prix: ${f.price || 'sur demande'})\n`
+          })
+          return reply
+        }
+      } catch (error) {
+        console.error('Erreur récupération formations:', error)
       }
-      const results = await client.fetch(groq)
-      if (results && results.length > 0) {
-        let reply = `Voici des formations qui pourraient vous intéresser :\n`
-        results.forEach((f: Formation) => {
-          reply += `- ${f.title} : ${f.description?.substring(0, 80)}... (durée: ${f.duration || '3 ans'}, prix: ${f.price || 'sur devis'})\n`
-        })
-        return reply
-      } else {
-        return "Je n'ai pas trouvé de formation correspondant à votre demande. Consultez notre page Formations pour plus de détails."
-      }
+      return "Je peux vous aider à trouver nos filières. Rendez-vous sur la page Formations pour la liste complète."
+    }
+    if (q.match(/\bbt\b/) || q.includes('niveau bt') || q.includes('brevet de technicien') || q.includes('niveau brevet')) {
+      return "Le BT (Brevet de Technicien) est un diplôme de formation professionnelle. Au CFP Sédhiou, nous proposons des parcours techniques et pratiques adaptés aux besoins du marché. Pour en savoir plus sur les modalités et les filières BT, consultez la page Formations ou contactez-nous directement."
     }
     else if (q.includes('actualité') || q.includes('nouvelle') || q.includes('news')) {
       const groq = `*[_type == "actualite"] | order(publishedAt desc) [0...2] { title, excerpt, publishedAt }`
@@ -270,17 +274,26 @@ export default function TidianyChat() {
     let bestScore = 0
     for (const item of knowledge) {
       let score = 0
-      if (lowerQuestion.includes(item.question.toLowerCase())) score = 100
-      else {
+      const itemQuestion = item.question.toLowerCase()
+      if (lowerQuestion.includes(itemQuestion) || itemQuestion.includes(lowerQuestion)) {
+        score = 120
+      } else {
         const keywords = item.keywords ? item.keywords.split(',').map(k => k.trim().toLowerCase()) : []
-        for (const kw of keywords) if (lowerQuestion.includes(kw)) score += 20
-        const words = lowerQuestion.split(' ')
-        const questionWords = item.question.toLowerCase().split(' ')
-        for (const w of words) if (questionWords.some(qw => qw.includes(w) || w.includes(qw))) score += 10
+        for (const kw of keywords) {
+          if (!kw) continue
+          if (lowerQuestion.includes(kw)) score += 30
+          else if (lowerQuestion.split(' ').some(word => kw.includes(word) || word.includes(kw))) score += 15
+        }
+        const words = lowerQuestion.split(/\s+/).filter(Boolean)
+        const questionWords = itemQuestion.split(/\s+/).filter(Boolean)
+        for (const w of words) {
+          if (questionWords.some(qw => qw === w)) score += 15
+          else if (questionWords.some(qw => qw.includes(w) || w.includes(qw))) score += 8
+        }
       }
       if (score > bestScore) { bestScore = score; bestMatch = item }
     }
-    return (bestScore >= 20) ? bestMatch!.answer : null
+    return (bestScore >= 30 && bestMatch) ? bestMatch.answer : null
   }
 
   if (!isOpen) {

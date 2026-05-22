@@ -182,11 +182,11 @@ export default async function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {caiPhoto && <img src={caiPhoto} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {caiPhoto && <img src={caiPhoto} alt="responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage?.title || 'Mot de la responsable CAI'}</h2>
+                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage?.title || 'Mot du responsable CAI'}</h2>
                   <details className="bg-white/0 p-0">
-                    <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message de la Responsable CAI</summary>
+                    <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message du responsable CAI</summary>
                     <div className="mt-4 text-stone-700">
                       <PortableText value={data.caiMessage.content} />
                     </div>
