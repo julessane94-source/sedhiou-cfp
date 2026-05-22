@@ -41,13 +41,26 @@ function getEmbedUrl(url: string | null | undefined): string | null {
 async function getAccueil() {
   try {
     const query = `*[_type == "accueil"][0]{
-      heroTitle,
-      heroSubtitle,
-      videoUrl,
-      heroImage,
-      carouselImages[]{ "url": asset->url },
-      directorMessage { title, content, "image": image.asset->url, signature },
-      caiMessage { title, content, "image": image.asset->url, signature },
+      hero {
+        title,
+        subtitle,
+        "backgroundImage": backgroundImage.asset->url,
+        carouselImages[]{ "url": asset->url },
+        videoUrl,
+        ctaText,
+        ctaLink
+      },
+      directorMessage {
+        title,
+        content,
+        "photo": photo.asset->url,
+        "signature": signature.asset->url
+      },
+      caiMessage {
+        title,
+        content,
+        "photo": photo.asset->url
+      },
       featuredEvents[]->{ _id, title, excerpt, "slug": slug.current, "coverImage": coverImage.asset->url, publishedAt },
       featuredFormations[]->{ _id, title, description, "slug": slug.current, "imageUrl": image.asset->url },
       stats[]{ value, label },
@@ -63,25 +76,26 @@ export default async function HomePage() {
 
   // Debug logging
   console.log('🔍 PAGE DATA DEBUG:')
+  console.log('- hero:', data.hero)
   console.log('- directorMessage:', data.directorMessage)
   console.log('- caiMessage:', data.caiMessage)
-  console.log('- videoUrl:', data.videoUrl)
-  console.log('- heroImage:', data.heroImage)
-  console.log('- carouselImages count:', data.carouselImages?.length)
+  console.log('- carouselImages count:', data.hero?.carouselImages?.length)
+  console.log('- featuredEvents:', data.featuredEvents?.length)
+  console.log('- featuredFormations:', data.featuredFormations?.length)
 
   // Rassembler toutes les images du site pour le diaporama
   const collected: string[] = []
-  if (data.carouselImages) collected.push(...data.carouselImages.map((img: any) => img.url))
-  if (data.heroImage) collected.push(data.heroImage)
-  if (data.directorMessage?.image) collected.push(data.directorMessage.image)
-  if (data.caiMessage?.image) collected.push(data.caiMessage.image)
+  if (data.hero?.carouselImages) collected.push(...data.hero.carouselImages.map((img: any) => img.url))
+  if (data.hero?.backgroundImage) collected.push(data.hero.backgroundImage)
+  if (data.directorMessage?.photo) collected.push(data.directorMessage.photo)
+  if (data.caiMessage?.photo) collected.push(data.caiMessage.photo)
   if (data.featuredFormations) collected.push(...(data.featuredFormations as any[]).map(f => f.imageUrl).filter(Boolean))
   if (data.featuredEvents) collected.push(...(data.featuredEvents as any[]).map(e => e.coverImage).filter(Boolean))
   // dédupliquer et garder les URLs valides
   const uniqueImages = Array.from(new Set(collected.filter(Boolean)))
 
   const carouselImages = uniqueImages
-  const embedUrl = getEmbedUrl(data.videoUrl)
+  const embedUrl = getEmbedUrl(data.hero?.videoUrl)
 
   // Afficher le diaporama en priorité, sauf si vidéo YouTube valide
   const showVideo = Boolean(embedUrl)
@@ -101,9 +115,9 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-br from-stone-800 to-stone-900 z-0"></div>
         )}
         <div className="relative z-10 text-center px-4 text-white max-w-4xl animate-fade-in-up">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.heroTitle || 'CFP SEDHIOU'}</h1>
-          <p className="text-xl md:text-2xl mb-8 drop-shadow">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link href="/formations" className="inline-block bg-white text-[#772a1d] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.hero?.title || 'CFP SEDHIOU'}</h1>
+          <p className="text-xl md:text-2xl mb-8 drop-shadow">{data.hero?.subtitle || 'Formez-vous pour un avenir meilleur'}</p>
+          <Link href={data.hero?.ctaLink || "/formations"} className="inline-block bg-white text-[#772a1d] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">{data.hero?.ctaText || 'Découvrir nos formations'} →</Link>
         </div>
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center"><div className="w-1 h-2 bg-white rounded-full mt-2"></div></div>
@@ -116,14 +130,14 @@ export default async function HomePage() {
           {data.directorMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.directorMessage.image && <img src={data.directorMessage.image} alt="Directeur" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {data.directorMessage?.photo && <img src={data.directorMessage.photo} alt="Directeur" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.directorMessage.title || 'Mot du Directeur'}</h2>
+                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.directorMessage?.title || 'Mot du Directeur'}</h2>
                   <details className="bg-white/0 p-0">
                     <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message du Directeur</summary>
                     <div className="mt-4 text-stone-700">
                       <PortableText value={data.directorMessage.content} />
-                      {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
+                      {data.directorMessage?.signature && <p className="mt-4 italic text-stone-600">Signature: {data.directorMessage.signature}</p>}
                     </div>
                   </details>
                 </div>
@@ -133,14 +147,13 @@ export default async function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.caiMessage.image && <img src={data.caiMessage.image} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {data.caiMessage?.photo && <img src={data.caiMessage.photo} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
+                  <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage?.title || 'Mot de la responsable CAI'}</h2>
                   <details className="bg-white/0 p-0">
                     <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message de la Responsable CAI</summary>
                     <div className="mt-4 text-stone-700">
                       <PortableText value={data.caiMessage.content} />
-                      {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
                     </div>
                   </details>
                 </div>
