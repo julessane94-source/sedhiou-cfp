@@ -5,33 +5,49 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 // Composant Carrousel simple
-function ImageCarousel({ images }: { images: string[] }) {
+function ImageCarousel({ images, autoplayInterval = 5000 }: { images: string[]; autoplayInterval?: number }) {
   const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+
   useEffect(() => {
-    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % images.length), 5000)
+    if (!images.length) return
+    if (paused) return
+    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % images.length), autoplayInterval)
     return () => clearInterval(timer)
-  }, [images.length])
+  }, [images.length, autoplayInterval, paused])
+
   if (!images.length) return null
+
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length)
+  const next = () => setCurrent((c) => (c + 1) % images.length)
+
   return (
-    <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-2xl shadow-2xl">
+    <div
+      className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-2xl shadow-2xl"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       {images.map((img, idx) => (
         <div
           key={idx}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
           <img src={img} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/30"></div>
         </div>
       ))}
+
+      {/* Prev / Next buttons */}
+      <button aria-label="Précédent" onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full p-2 hover:bg-black/60 z-30">
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 6 L9 12 L15 18" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      <button aria-label="Suivant" onClick={next} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full p-2 hover:bg-black/60 z-30">
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6 L15 12 L9 18" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+
       <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
         {images.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`w-3 h-3 rounded-full transition-all ${idx === current ? 'bg-white scale-125' : 'bg-white/50'}`}
-          />
+          <button key={idx} onClick={() => setCurrent(idx)} className={`w-3 h-3 rounded-full transition-all ${idx === current ? 'bg-white scale-125' : 'bg-white/50'}`} />
         ))}
       </div>
     </div>
@@ -137,7 +153,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        {/* foreground media (video or large image) */}
+        {/* foreground media (video or large image / carousel) */}
         <div className="relative z-10 w-full flex justify-center px-4">
           {data.hero?.videoUrl ? (
             <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-2xl">
@@ -150,6 +166,10 @@ export default function HomePage() {
                 title="Hero video"
               />
             </div>
+          ) : data.hero?.carouselImages && data.hero.carouselImages.length > 0 ? (
+            <div className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl">
+              <ImageCarousel images={data.hero.carouselImages} autoplayInterval={4000} />
+            </div>
           ) : (
             <div className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl">
               <img src={heroImage} className="w-full h-auto object-cover" alt="Hero" />
@@ -161,12 +181,14 @@ export default function HomePage() {
         <div className="relative z-20 text-center px-4 text-white max-w-4xl mt-8 animate-fade-in-up">
           <h1 className="text-4xl md:text-6xl font-bold mb-3 drop-shadow-lg">{data.hero?.title || 'CFP SEDHIOU'}</h1>
           <p className="text-lg md:text-xl mb-6 drop-shadow">{data.hero?.subtitle || 'Formez-vous pour un avenir meilleur'}</p>
-          <Link
-            href="/formations"
-            className="inline-block bg-white text-[#772a1d] px-7 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg hover:shadow-xl"
-          >
-            Découvrir nos formations →
-          </Link>
+          <div className="flex items-center justify-center gap-4">
+            <Link href="/formations" className="inline-block bg-white text-[#772a1d] px-7 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+              Découvrir nos formations →
+            </Link>
+            <Link href="/inscription" className="inline-block bg-white/10 border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/20 transition transform hover:-translate-y-1">
+              M'inscrire
+            </Link>
+          </div>
         </div>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
