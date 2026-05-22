@@ -84,9 +84,9 @@ export default async function HomePage() {
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {showCarousel ? (
           <div className="absolute inset-0 z-0"><ImageCarousel images={carouselImages} /></div>
-        ) : showVideo ? (
+          ) : showVideo ? (
           <div className="absolute inset-0 w-full h-full z-0">
-            <iframe src={embedUrl} className="w-full h-full object-cover" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
+            <iframe src={embedUrl ?? undefined} className="w-full h-full object-cover" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
         ) : (
