@@ -106,6 +106,19 @@ export default async function ContactPage() {
                     </a>
                   )}
                 </div>
+                {contact?.address && (
+                  <div className="mt-6">
+                    <h3 className="text-lg font-semibold mb-2">Localisation</h3>
+                    <div className="w-full h-48 rounded-xl overflow-hidden border border-gray-200">
+                      <iframe
+                        title="Carte localisation"
+                        src={`https://www.google.com/maps?q=${encodeURIComponent(contact.address)}&output=embed`}
+                        className="w-full h-full border-0"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
