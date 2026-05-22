@@ -28,6 +28,39 @@ interface Stat {
   label: string
 }
 
+interface DirectorMessage {
+  title?: string
+  content?: any
+  image?: string
+  signature?: string
+}
+
+interface CaiMessage {
+  title?: string
+  content?: any
+  image?: string
+  signature?: string
+}
+
+interface BottomCta {
+  text: string
+  link: string
+}
+
+interface AccueilData {
+  heroTitle?: string
+  heroSubtitle?: string
+  videoUrl?: string
+  heroImage?: string
+  carouselImages?: { url: string }[]
+  directorMessage?: DirectorMessage
+  caiMessage?: CaiMessage
+  featuredEvents?: FeaturedEvent[]
+  featuredFormations?: FeaturedFormation[]
+  stats?: Stat[]
+  bottomCta?: BottomCta
+}
+
 function getEmbedUrl(url: string | null | undefined): string | null {
   if (!url) return null
   let cleanUrl = url.replace(/^http:\/\//i, 'https://')
@@ -42,7 +75,7 @@ function getEmbedUrl(url: string | null | undefined): string | null {
   return null
 }
 
-async function getAccueil() {
+async function getAccueil(): Promise<AccueilData | null> {
   try {
     const query = `*[_type == "accueil"][0]{
       heroTitle,
@@ -58,7 +91,10 @@ async function getAccueil() {
       bottomCta { text, link }
     }`
     return await client.fetch(query)
-  } catch (err) { return null }
+  } catch (err) {
+    console.error(err)
+    return null
+  }
 }
 
 export default async function HomePage() {
@@ -74,6 +110,7 @@ export default async function HomePage() {
 
   return (
     <div>
+      {/* SECTION HERO */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {showCarousel ? (
           <div className="absolute inset-0 z-0"><ImageCarousel images={carouselImages} /></div>
@@ -97,6 +134,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* MESSAGES */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
         <div className="max-w-5xl mx-auto space-y-12">
           {data.directorMessage?.content && (
@@ -126,6 +164,7 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* ÉVÉNEMENTS */}
       {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
@@ -148,6 +187,7 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* FORMATIONS EN VEDETTE */}
       {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
@@ -169,6 +209,7 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* STATISTIQUES */}
       {data.stats && data.stats.length > 0 && (
         <div className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -182,6 +223,7 @@ export default async function HomePage() {
         </div>
       )}
 
+      {/* APPEL À L'ACTION FINAL */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
