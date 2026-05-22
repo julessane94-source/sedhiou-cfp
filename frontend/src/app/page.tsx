@@ -23,44 +23,6 @@ interface FeaturedFormation {
   imageUrl?: string
 }
 
-interface Stat {
-  value: string
-  label: string
-}
-
-interface DirectorMessage {
-  title?: string
-  content?: any
-  image?: string
-  signature?: string
-}
-
-interface CaiMessage {
-  title?: string
-  content?: any
-  image?: string
-  signature?: string
-}
-
-interface BottomCta {
-  text: string
-  link: string
-}
-
-interface AccueilData {
-  heroTitle?: string
-  heroSubtitle?: string
-  videoUrl?: string
-  heroImage?: string
-  carouselImages?: { url: string }[]
-  directorMessage?: DirectorMessage
-  caiMessage?: CaiMessage
-  featuredEvents?: FeaturedEvent[]
-  featuredFormations?: FeaturedFormation[]
-  stats?: Stat[]
-  bottomCta?: BottomCta
-}
-
 function getEmbedUrl(url: string | null | undefined): string | null {
   if (!url) return null
   let cleanUrl = url.replace(/^http:\/\//i, 'https://')
@@ -75,7 +37,7 @@ function getEmbedUrl(url: string | null | undefined): string | null {
   return null
 }
 
-async function getAccueil(): Promise<AccueilData | null> {
+async function getAccueil() {
   try {
     const query = `*[_type == "accueil"][0]{
       heroTitle,
@@ -91,10 +53,7 @@ async function getAccueil(): Promise<AccueilData | null> {
       bottomCta { text, link }
     }`
     return await client.fetch(query)
-  } catch (err) {
-    console.error(err)
-    return null
-  }
+  } catch (err) { return null }
 }
 
 export default async function HomePage() {
@@ -110,7 +69,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* SECTION HERO */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {showCarousel ? (
           <div className="absolute inset-0 z-0"><ImageCarousel images={carouselImages} /></div>
@@ -128,13 +86,11 @@ export default async function HomePage() {
           <Link href="/formations" className="inline-block bg-white text-[#772a1d] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg">Découvrir nos formations →</Link>
         </div>
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-2 bg-white rounded-full mt-2"></div>
-          </div>
+          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center"><div className="w-1 h-2 bg-white rounded-full mt-2"></div></div>
         </div>
       </section>
 
-      {/* MESSAGES */}
+      {/* Messages Directeur / CAI */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
         <div className="max-w-5xl mx-auto space-y-12">
           {data.directorMessage?.content && (
@@ -164,14 +120,14 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ÉVÉNEMENTS */}
-      {data.featuredEvents && data.featuredEvents.length > 0 && (
+      {/* Événements */}
+      {data.featuredEvents?.length > 0 && (
         <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-4">Actualités & Événements</h2>
             <p className="text-center text-stone-600 mb-12">Restez informés des dernières nouvelles du centre</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.featuredEvents.map((event: FeaturedEvent) => (
+              {(data.featuredEvents as FeaturedEvent[]).map((event) => (
                 <div key={event._id} className="bg-stone-50 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                   {event.coverImage && <img src={event.coverImage} className="w-full h-48 object-cover" />}
                   <div className="p-6">
@@ -187,14 +143,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* FORMATIONS EN VEDETTE */}
-      {data.featuredFormations && data.featuredFormations.length > 0 && (
+      {/* Formations vedette */}
+      {data.featuredFormations?.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-4">Formations en vedette</h2>
             <p className="text-center text-stone-600 mb-12">Découvrez nos parcours les plus demandés</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.featuredFormations.map((formation: FeaturedFormation) => (
+              {(data.featuredFormations as FeaturedFormation[]).map((formation) => (
                 <div key={formation._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                   {formation.imageUrl && <img src={formation.imageUrl} className="w-full h-48 object-cover" />}
                   <div className="p-6">
@@ -209,11 +165,11 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* STATISTIQUES */}
-      {data.stats && data.stats.length > 0 && (
+      {/* Statistiques */}
+      {data.stats?.length > 0 && (
         <div className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {data.stats.map((stat: Stat, idx: number) => (
+            {data.stats.map((stat: { value: string; label: string }, idx: number) => (
               <div key={idx}>
                 <div className="text-5xl font-bold text-[#772a1d]">{stat.value}</div>
                 <div className="text-stone-600 mt-2">{stat.label}</div>
@@ -223,7 +179,7 @@ export default async function HomePage() {
         </div>
       )}
 
-      {/* APPEL À L'ACTION FINAL */}
+      {/* CTA */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
