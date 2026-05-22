@@ -1,36 +1,86 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { client } from '@/lib/sanity/client'
 
-// FAQ simple (règles)
-const faq = [
-  { keywords: ['bonjour', 'salut', 'coucou'], response: "Bonjour ! Comment puis-je vous aider ?" },
-  { keywords: ['formation', 'formations', 'cours'], response: "Nous proposons des CAP en Horticulteur, Coiffeur, Couture, Cuisine, Développement local, Santé/hygiène, ainsi que des Attestations en Coiffure, Restauration, Habillement. Consultez notre page Formations." },
-  { keywords: ['inscription', 'candidature', 'postuler'], response: "Vous pouvez vous inscrire via notre formulaire en ligne : https://sedhiou-cfp1.vercel.app/inscription" },
-  { keywords: ['horaire', 'horaires', 'ouverture'], response: "Le centre est ouvert du lundi au vendredi de 8h à 17h, et le samedi de 9h à 13h." },
-  { keywords: ['adresse', 'localisation', 'où'], response: "Nous sommes situés à Quartier Moricounda, face au Pôle Emploi de Sédhiou, Sénégal." },
-  { keywords: ['téléphone', 'appeler', 'contact'], response: "Vous pouvez nous joindre au +221 77 885 16 91 ou par email à cfpsedhiou@gmail.com." },
-  { keywords: ['coût', 'prix', 'tarif'], response: "Les tarifs varient selon la formation. Contactez-nous pour plus de détails." },
-  { keywords: ['durée', 'longueur'], response: "Les formations durent généralement 3 ans (CAP ou Attestation)." },
-  { keywords: ['directeur', 'doubaless'], response: "Le directeur du CFP SEDHIOU est Monsieur Doubaless Yinghou." },
-  { keywords: ['merci', 'merci beaucoup'], response: "Avec plaisir ! N'hésitez pas si vous avez d'autres questions." },
-]
+interface ChatbotKnowledge {
+  _id: string
+  question: string
+  answer: string
+  keywords?: string
+}
 
-function getResponse(message: string): string {
-  const lowerMsg = message.toLowerCase()
-  for (const item of faq) {
-    for (const kw of item.keywords) {
-      if (lowerMsg.includes(kw)) {
-        return item.response
+async function getChatbotKnowledge(): Promise<ChatbotKnowledge[]> {
+  try {
+    const query = `*[_type == "chatbotKnowledge"] { _id, question, answer, keywords }`
+    const results = await client.fetch(query)
+    return results || []
+  } catch (error) {
+    console.error('Erreur Sanity:', error)
+    return []
+  }
+}
+
+function calculateSimilarity(text1: string, text2: string): number {
+  const t1 = text1.toLowerCase()
+  const t2 = text2.toLowerCase()
+  
+  // Comptabiliser les mots en commun
+  const words1 = t1.split(/\s+/)
+  const words2 = t2.split(/\s+/)
+  
+  let matches = 0
+  for (const w1 of words1) {
+    for (const w2 of words2) {
+      if (w1.includes(w2) || w2.includes(w1)) {
+        matches++
       }
     }
   }
-  return "Je ne comprends pas encore cette question. Veuillez contacter notre équipe directement par téléphone ou email, ou consulter notre site pour plus d'informations."
+  
+  return matches / Math.max(words1.length, words2.length)
+}
+
+function findBestMatch(message: string, knowledgeBase: ChatbotKnowledge[]): ChatbotKnowledge | null {
+  let bestMatch: ChatbotKnowledge | null = null
+  let bestScore = 0.3 // Seuil minimum
+  
+  const lowerMsg = message.toLowerCase()
+  
+  for (const item of knowledgeBase) {
+    // Chercher dans la question
+    let score = calculateSimilarity(message, item.question)
+    
+    // Chercher dans les keywords
+    if (item.keywords) {
+      const keywordsList = item.keywords.split(',').map(k => k.trim())
+      for (const keyword of keywordsList) {
+        if (lowerMsg.includes(keyword.toLowerCase())) {
+          score = Math.max(score, 0.8)
+        }
+      }
+    }
+    
+    if (score > bestScore) {
+      bestScore = score
+      bestMatch = item
+    }
+  }
+  
+  return bestMatch
 }
 
 export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     if (!message) return NextResponse.json({ error: "Message manquant" }, { status: 400 })
-    const reply = getResponse(message)
+    
+    // Récupérer la base de connaissances
+    const knowledgeBase = await getChatbotKnowledge()
+    
+    // Trouver la meilleure réponse
+    const bestMatch = findBestMatch(message, knowledgeBase)
+    
+    let reply = bestMatch?.answer || "Je n'ai pas trouvé de réponse. Posez une autre question ou contactez-nous directement au +221 77 885 16 91 ou contact@cfpsedhiou.sn"
+    
     // Petite simulation de délai pour un effet naturel
     await new Promise(resolve => setTimeout(resolve, 500))
     return NextResponse.json({ reply })
