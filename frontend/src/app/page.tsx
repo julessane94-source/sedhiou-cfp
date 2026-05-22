@@ -6,6 +6,28 @@ import ImageCarousel from '@/components/ImageCarousel'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+interface FeaturedEvent {
+  _id: string
+  title: string
+  excerpt: string
+  slug: string
+  coverImage?: string
+  publishedAt: string
+}
+
+interface FeaturedFormation {
+  _id: string
+  title: string
+  description: string
+  slug: string
+  imageUrl?: string
+}
+
+interface Stat {
+  value: string
+  label: string
+}
+
 function getEmbedUrl(url: string | null | undefined): string | null {
   if (!url) return null
   let cleanUrl = url.replace(/^http:\/\//i, 'https://')
@@ -52,7 +74,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* SECTION HERO avec carrousel / vidéo / image de fond */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {showCarousel ? (
           <div className="absolute inset-0 z-0"><ImageCarousel images={carouselImages} /></div>
@@ -76,7 +97,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* MESSAGES (Directeur / CAI) */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
         <div className="max-w-5xl mx-auto space-y-12">
           {data.directorMessage?.content && (
@@ -106,14 +126,13 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ÉVÉNEMENTS (si existants) */}
-      {data.featuredEvents?.length > 0 && (
+      {data.featuredEvents && data.featuredEvents.length > 0 && (
         <section className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-4">Actualités & Événements</h2>
             <p className="text-center text-stone-600 mb-12">Restez informés des dernières nouvelles du centre</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.featuredEvents.map((event) => (
+              {data.featuredEvents.map((event: FeaturedEvent) => (
                 <div key={event._id} className="bg-stone-50 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                   {event.coverImage && <img src={event.coverImage} className="w-full h-48 object-cover" />}
                   <div className="p-6">
@@ -129,14 +148,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* FORMATIONS EN VEDETTE */}
-      {data.featuredFormations?.length > 0 && (
+      {data.featuredFormations && data.featuredFormations.length > 0 && (
         <section className="py-20 px-4 bg-stone-100">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-3xl font-bold text-center text-stone-800 mb-4">Formations en vedette</h2>
             <p className="text-center text-stone-600 mb-12">Découvrez nos parcours les plus demandés</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.featuredFormations.map((formation) => (
+              {data.featuredFormations.map((formation: FeaturedFormation) => (
                 <div key={formation._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                   {formation.imageUrl && <img src={formation.imageUrl} className="w-full h-48 object-cover" />}
                   <div className="p-6">
@@ -151,11 +169,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* STATISTIQUES */}
-      {data.stats?.length > 0 && (
+      {data.stats && data.stats.length > 0 && (
         <div className="py-20 px-4 bg-white">
           <div className="container mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {data.stats.map((stat, idx) => (
+            {data.stats.map((stat: Stat, idx: number) => (
               <div key={idx}>
                 <div className="text-5xl font-bold text-[#772a1d]">{stat.value}</div>
                 <div className="text-stone-600 mt-2">{stat.label}</div>
@@ -165,7 +182,6 @@ export default async function HomePage() {
         </div>
       )}
 
-      {/* APPEL À L'ACTION FINAL */}
       {data.bottomCta && (
         <div className="py-20 px-4 bg-[#772a1d] text-white text-center">
           <div className="container mx-auto">
