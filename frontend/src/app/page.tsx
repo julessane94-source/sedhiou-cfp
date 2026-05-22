@@ -83,19 +83,35 @@ export default async function HomePage() {
   console.log('- featuredEvents:', data.featuredEvents?.length)
   console.log('- featuredFormations:', data.featuredFormations?.length)
 
-  // Rassembler toutes les images du site pour le diaporama
+  // Helper: normalize media URLs to HTTPS to avoid mixed-content blocking on Vercel
+  function normalizeUrl(raw: any): string | undefined {
+    if (!raw) return undefined
+    let url = typeof raw === 'string' ? raw : (raw.url || raw)
+    if (!url) return undefined
+    url = String(url).trim()
+    if (url.startsWith('//')) url = 'https:' + url
+    url = url.replace(/^http:\/\//i, 'https://')
+    return url
+  }
+
+  // Rassembler toutes les images du site pour le diaporama (normalize HTTPS)
   const collected: string[] = []
-  if (data.hero?.carouselImages) collected.push(...data.hero.carouselImages.map((img: any) => img.url))
-  if (data.hero?.backgroundImage) collected.push(data.hero.backgroundImage)
-  if (data.directorMessage?.photo) collected.push(data.directorMessage.photo)
-  if (data.caiMessage?.photo) collected.push(data.caiMessage.photo)
-  if (data.featuredFormations) collected.push(...(data.featuredFormations as any[]).map(f => f.imageUrl).filter(Boolean))
-  if (data.featuredEvents) collected.push(...(data.featuredEvents as any[]).map(e => e.coverImage).filter(Boolean))
+  if (data.hero?.carouselImages) collected.push(...data.hero.carouselImages.map((img: any) => normalizeUrl(img.url)).filter(Boolean) as string[])
+  if (data.hero?.backgroundImage) collected.push(normalizeUrl(data.hero.backgroundImage) as string)
+  if (data.directorMessage?.photo) collected.push(normalizeUrl(data.directorMessage.photo) as string)
+  if (data.caiMessage?.photo) collected.push(normalizeUrl(data.caiMessage.photo) as string)
+  if (data.featuredFormations) collected.push(...(data.featuredFormations as any[]).map(f => normalizeUrl(f.imageUrl)).filter(Boolean) as string[])
+  if (data.featuredEvents) collected.push(...(data.featuredEvents as any[]).map(e => normalizeUrl(e.coverImage)).filter(Boolean) as string[])
   // dédupliquer et garder les URLs valides
   const uniqueImages = Array.from(new Set(collected.filter(Boolean)))
 
   const carouselImages = uniqueImages
-  const embedUrl = getEmbedUrl(data.hero?.videoUrl)
+  const embedUrl = getEmbedUrl(normalizeUrl(data.hero?.videoUrl) ?? undefined)
+
+  // also normalize image urls used directly in JSX
+  const directorPhoto = normalizeUrl(data.directorMessage?.photo)
+  const directorSignature = normalizeUrl(data.directorMessage?.signature)
+  const caiPhoto = normalizeUrl(data.caiMessage?.photo)
 
   // Afficher le diaporama en priorité, sauf si vidéo YouTube valide
   const showVideo = Boolean(embedUrl)
@@ -130,14 +146,14 @@ export default async function HomePage() {
           {data.directorMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.directorMessage?.photo && <img src={data.directorMessage.photo} alt="Directeur" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {directorPhoto && <img src={directorPhoto} alt="Directeur" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.directorMessage?.title || 'Mot du Directeur'}</h2>
                   <details className="bg-white/0 p-0">
                     <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message du Directeur</summary>
                     <div className="mt-4 text-stone-700">
                       <PortableText value={data.directorMessage.content} />
-                      {data.directorMessage?.signature && <p className="mt-4 italic text-stone-600">Signature: {data.directorMessage.signature}</p>}
+                      {directorSignature && <p className="mt-4 italic text-stone-600">Signature: <img src={directorSignature} alt="Signature" className="inline-block h-6" /></p>}
                     </div>
                   </details>
                 </div>
@@ -147,7 +163,7 @@ export default async function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.caiMessage?.photo && <img src={data.caiMessage.photo} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {caiPhoto && <img src={caiPhoto} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage?.title || 'Mot de la responsable CAI'}</h2>
                   <details className="bg-white/0 p-0">
