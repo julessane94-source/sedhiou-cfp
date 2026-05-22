@@ -34,4 +34,5 @@ export const schemaTypes = [
   contact,
   accueil,
   aPropos,
-, chatbotKnowledge]
+  chatbotKnowledge
+]
