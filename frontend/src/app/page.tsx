@@ -78,31 +78,26 @@ export default function HomePage() {
     </div>
   )
 
-  const carouselImages = data.carouselImages?.map((img: any) => img.url) || []
-  if (data.heroImage && carouselImages.length === 0) carouselImages.push(data.heroImage)
+  const heroImage = data.hero?.backgroundImage || '/images/hero-placeholder.svg'
 
   return (
     <div>
       {/* HERO AVEC CARROUSEL */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {carouselImages.length > 0 ? (
-          <div className="absolute inset-0 z-0">
-            <ImageCarousel images={carouselImages} />
-          </div>
-        ) : data.videoUrl ? (
+        {data.hero?.videoUrl ? (
           <div className="absolute inset-0 w-full h-full z-0">
-            <iframe src={data.videoUrl} className="w-full h-full object-cover" frameBorder="0" allowFullScreen />
+            <iframe src={data.hero.videoUrl} className="w-full h-full object-cover" frameBorder="0" allowFullScreen />
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
         ) : (
           <div className="absolute inset-0 w-full h-full z-0">
-            <img src="/images/hero-placeholder.svg" className="w-full h-full object-cover" alt="Image par défaut" />
+            <img src={heroImage} className="w-full h-full object-cover" alt="Image par défaut" />
             <div className="absolute inset-0 bg-black/30"></div>
           </div>
         )}
         <div className="relative z-10 text-center px-4 text-white max-w-4xl animate-fade-in-up">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.heroTitle || 'CFP SEDHIOU'}</h1>
-          <p className="text-xl md:text-2xl mb-8 drop-shadow">{data.heroSubtitle || 'Formez-vous pour un avenir meilleur'}</p>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{data.hero?.title || 'CFP SEDHIOU'}</h1>
+          <p className="text-xl md:text-2xl mb-8 drop-shadow">{data.hero?.subtitle || 'Formez-vous pour un avenir meilleur'}</p>
           <Link
             href="/formations"
             className="inline-block bg-white text-[#772a1d] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg hover:shadow-xl"
@@ -123,7 +118,7 @@ export default function HomePage() {
           {data.directorMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 hover:shadow-2xl transition animate-fade-in-up">
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                <img src={data.directorMessage.image || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Directeur" />
+                <img src={data.directorMessage?.photo || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Directeur" />
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-2">{data.directorMessage.title || 'Mot du Directeur'}</h2>
                   <div className="prose prose-stone max-w-none"><PortableText value={data.directorMessage.content} /></div>
@@ -135,7 +130,7 @@ export default function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 hover:shadow-2xl transition animate-fade-in-up animation-delay-200">
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                <img src={data.caiMessage.image || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Responsable CAI" />
+                <img src={data.caiMessage?.photo || '/images/avatar-placeholder.svg'} className="w-24 h-24 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Responsable CAI" />
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-2">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
                   <div className="prose prose-stone max-w-none"><PortableText value={data.caiMessage.content} /></div>

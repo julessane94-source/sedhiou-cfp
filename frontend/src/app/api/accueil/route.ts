@@ -2,13 +2,9 @@ import { NextResponse } from 'next/server'
 import { client } from '@/lib/sanity/client'
 
 const query = `*[_type == "accueil"][0]{
-  heroTitle,
-  heroSubtitle,
-  videoUrl,
-  heroImage,
-  carouselImages[]{ "url": asset->url },
-  directorMessage { title, content, "image": image.asset->url, signature },
-  caiMessage { title, content, "image": image.asset->url, signature },
+  hero{ title, subtitle, "backgroundImage": backgroundImage.asset->url, videoUrl, ctaText, ctaLink },
+  directorMessage{ title, content, "photo": photo.asset->url, "signature": signature.asset->url },
+  caiMessage{ title, content, "photo": photo.asset->url },
   featuredEvents[]->{ _id, title, excerpt, "slug": slug.current, "coverImage": coverImage.asset->url, publishedAt },
   featuredFormations[]->{ _id, title, description, "slug": slug.current, "imageUrl": image.asset->url },
   stats[]{ value, label },
