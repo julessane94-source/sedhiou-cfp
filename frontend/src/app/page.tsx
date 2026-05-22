@@ -54,8 +54,8 @@ function Modal({ open, onClose, title, children }: any) {
   )
 }
 
-function normalizeVideoUrl(url: string | undefined) {
-  if (!url) return null
+function normalizeVideoUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined
   try {
     if (url.includes('youtube.com/embed') || url.includes('youtube-nocookie.com/embed')) return url
     const u = new URL(url)
