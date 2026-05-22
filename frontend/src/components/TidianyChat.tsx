@@ -17,6 +17,32 @@ interface KnowledgeItem {
   keywords?: string
 }
 
+interface Formation {
+  title: string
+  description?: string
+  price?: string
+  duration?: string
+  startDate?: string
+}
+
+interface Actualite {
+  title: string
+  excerpt?: string
+  publishedAt: string
+}
+
+interface AppelCandidature {
+  title: string
+  description?: string
+  deadline: string
+}
+
+interface Contact {
+  phone: string
+  email: string
+  address: string
+}
+
 export default function TidianyChat() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
@@ -70,7 +96,7 @@ export default function TidianyChat() {
       const results = await client.fetch(groq)
       if (results && results.length > 0) {
         let reply = `Voici des formations qui pourraient vous intéresser :\n`
-        results.forEach(f => {
+        results.forEach((f: Formation) => {
           reply += `- ${f.title} : ${f.description?.substring(0, 80)}... (durée: ${f.duration || '3 ans'}, prix: ${f.price || 'sur devis'})\n`
         })
         return reply
@@ -83,7 +109,7 @@ export default function TidianyChat() {
       const results = await client.fetch(groq)
       if (results && results.length > 0) {
         let reply = `Voici les dernières actualités :\n`
-        results.forEach(a => {
+        results.forEach((a: Actualite) => {
           reply += `- ${a.title} (${new Date(a.publishedAt).toLocaleDateString()}) : ${a.excerpt?.substring(0, 100)}...\n`
         })
         return reply
@@ -96,7 +122,7 @@ export default function TidianyChat() {
       const results = await client.fetch(groq)
       if (results && results.length > 0) {
         let reply = `Appels à candidatures ouverts :\n`
-        results.forEach(a => {
+        results.forEach((a: AppelCandidature) => {
           reply += `- ${a.title} : ${a.description?.substring(0, 80)}... (date limite: ${new Date(a.deadline).toLocaleDateString()})\n`
         })
         return reply
@@ -109,7 +135,7 @@ export default function TidianyChat() {
       const results = await client.fetch(groq)
       if (results && results.length > 0) {
         let reply = `Tarifs des formations :\n`
-        results.forEach(f => {
+        results.forEach((f: Formation) => {
           if (f.price) reply += `- ${f.title} : ${f.price}\n`
         })
         if (reply === `Tarifs des formations :\n`) reply += "Aucun tarif renseigné pour le moment. Contactez-nous pour un devis personnalisé."
@@ -123,8 +149,8 @@ export default function TidianyChat() {
       const results = await client.fetch(groq)
       if (results && results.length > 0) {
         let reply = `Prochaines dates de début de formation :\n`
-        results.forEach(f => {
-          reply += `- ${f.title} : ${new Date(f.startDate).toLocaleDateString()}\n`
+        results.forEach((f: Formation) => {
+          reply += `- ${f.title} : ${new Date(f.startDate!).toLocaleDateString()}\n`
         })
         return reply
       } else {
