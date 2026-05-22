@@ -57,18 +57,23 @@ function Modal({ open, onClose, title, children }: any) {
 function normalizeVideoUrl(url: string | undefined): string | undefined {
   if (!url) return undefined
   try {
-    if (url.includes('youtube.com/embed') || url.includes('youtube-nocookie.com/embed')) return url
+    const getEmbedUrl = (embedUrl: string) => {
+      const separator = embedUrl.includes('?') ? '&' : '?'
+      return `${embedUrl}${separator}autoplay=1&mute=1&rel=0&modestbranding=1`
+    }
+
+    if (url.includes('youtube.com/embed') || url.includes('youtube-nocookie.com/embed')) return getEmbedUrl(url)
     const u = new URL(url)
     if (u.hostname.includes('youtu.be')) {
       const id = u.pathname.slice(1)
-      return `https://www.youtube-nocookie.com/embed/${id}`
+      return getEmbedUrl(`https://www.youtube-nocookie.com/embed/${id}`)
     }
     if (u.hostname.includes('youtube.com')) {
       const v = u.searchParams.get('v')
-      if (v) return `https://www.youtube-nocookie.com/embed/${v}`
+      if (v) return getEmbedUrl(`https://www.youtube-nocookie.com/embed/${v}`)
       const parts = u.pathname.split('/')
       const idx = parts.indexOf('embed')
-      if (idx !== -1 && parts[idx + 1]) return `https://www.youtube-nocookie.com/embed/${parts[idx + 1]}`
+      if (idx !== -1 && parts[idx + 1]) return getEmbedUrl(`https://www.youtube-nocookie.com/embed/${parts[idx + 1]}`)
     }
     return url
   } catch (e) {
