@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "publish:sanity:drafts:dry": "node ./scripts/publish-sanity-drafts.js",
+    "publish:sanity:drafts": "node ./scripts/publish-sanity-drafts.js --apply",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
