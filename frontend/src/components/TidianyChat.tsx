@@ -43,6 +43,14 @@ interface Contact {
   address: string
 }
 
+interface Director {
+  name: string
+  title?: string
+  email?: string
+  phone?: string
+  bio?: string
+}
+
 export default function TidianyChat() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
@@ -77,6 +85,33 @@ export default function TidianyChat() {
   // Fonction pour interroger Sanity de manière intelligente
   async function smartSearch(question: string): Promise<string | null> {
     const q = question.toLowerCase()
+    
+    // Détection des salutations
+    if (q.includes('bonjour') || q.includes('salut') || q.includes('coucou') || q.includes('allo') || q.includes('hey')) {
+      return "Bonjour! 👋 Je suis Tidiany, votre assistant virtuel. Comment puis-je vous aider aujourd'hui? Vous pouvez me poser des questions sur nos formations, actualités, appels à candidatures, tarifs, ou toute autre information!"
+    }
+
+    // Détection des questions sur le directeur
+    if (q.includes('directeur') || q.includes('chef') || q.includes('administrateur') || q.includes('responsable') || q.includes('dirigeant')) {
+      try {
+        const groq = `*[_type == "siteSettings"][0] { director_name, director_email, director_phone, director_title }`
+        const settings = await client.fetch(groq)
+        if (settings && settings.director_name) {
+          let reply = `Le directeur du CFP Sédhiou est **${settings.director_name}**`
+          if (settings.director_title) reply += ` (${settings.director_title})`
+          reply += `.\n`
+          if (settings.director_email) reply += `📧 Email: ${settings.director_email}\n`
+          if (settings.director_phone) reply += `📞 Téléphone: ${settings.director_phone}`
+          return reply
+        } else {
+          return "Je n'ai pas d'informations sur le directeur actuellement. Veuillez nous contacter directement au +221 77 885 16 91 ou à contact@cfpsedhiou.sn."
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération du directeur:', error)
+        return "Nous contacter pour plus d'informations sur la direction: +221 77 885 16 91"
+      }
+    }
+    
     // Détection des intentions
     if (q.includes('formation') || q.includes('cours') || q.includes('filière')) {
       // Chercher des formations
