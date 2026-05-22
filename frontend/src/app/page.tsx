@@ -56,14 +56,16 @@ function Modal({ open, onClose, title, children }: any) {
 
 function normalizeVideoUrl(url: string | undefined): string | undefined {
   if (!url) return undefined
+  const normalizedUrl = url.trim().replace(/^http:\/\//i, 'https://').replace(/^\/\//, 'https://')
   try {
     const getEmbedUrl = (embedUrl: string) => {
-      const separator = embedUrl.includes('?') ? '&' : '?'
-      return `${embedUrl}${separator}autoplay=1&mute=1&rel=0&modestbranding=1`
+      const secureUrl = embedUrl.replace(/^http:\/\//i, 'https://')
+      const separator = secureUrl.includes('?') ? '&' : '?'
+      return `${secureUrl}${separator}autoplay=1&mute=1&rel=0&modestbranding=1`
     }
 
-    if (url.includes('youtube.com/embed') || url.includes('youtube-nocookie.com/embed')) return getEmbedUrl(url)
-    const u = new URL(url)
+    if (normalizedUrl.includes('youtube.com/embed') || normalizedUrl.includes('youtube-nocookie.com/embed')) return getEmbedUrl(normalizedUrl)
+    const u = new URL(normalizedUrl)
     if (u.hostname.includes('youtu.be')) {
       const id = u.pathname.slice(1)
       return getEmbedUrl(`https://www.youtube-nocookie.com/embed/${id}`)
@@ -75,9 +77,9 @@ function normalizeVideoUrl(url: string | undefined): string | undefined {
       const idx = parts.indexOf('embed')
       if (idx !== -1 && parts[idx + 1]) return getEmbedUrl(`https://www.youtube-nocookie.com/embed/${parts[idx + 1]}`)
     }
-    return url
+    return normalizedUrl
   } catch (e) {
-    return url
+    return normalizedUrl
   }
 }
 
