@@ -66,13 +66,27 @@ async function getAccueil() {
       stats[]{ value, label },
       bottomCta { text, link }
     }`
-    return await client.fetch(query)
+    const accueil = await client.fetch(query)
+
+    // Récupérer les images des autres types de documents (formations, actualités, appels)
+    const mediaQuery = `{
+      "formationImages": *[_type == "formation" && defined(image.asset->url)]{ "url": image.asset->url },
+      "actualiteCovers": *[_type == "actualite" && defined(coverImage.asset->url)]{ "url": coverImage.asset->url },
+      "actualiteGalleries": *[_type == "actualite" && count(gallery) > 0]{ "urls": gallery[].asset->url },
+      "appelImages": *[_type == "appelCandidature" && defined(heroImage.asset->url)]{ "url": heroImage.asset->url }
+    }`
+
+    const media = await client.fetch(mediaQuery)
+
+    return { accueil, media }
   } catch (err) { return null }
 }
 
 export default async function HomePage() {
-  const data = await getAccueil()
-  if (!data) return <div className="pt-24 text-center">Chargement...</div>
+  const result = await getAccueil()
+  if (!result) return <div className="pt-24 text-center">Chargement...</div>
+  const data = result.accueil
+  const media = result.media || {}
 
   // Debug logging
   console.log('🔍 PAGE DATA DEBUG:')
@@ -102,6 +116,11 @@ export default async function HomePage() {
   if (data.caiMessage?.photo) collected.push(normalizeUrl(data.caiMessage.photo) as string)
   if (data.featuredFormations) collected.push(...(data.featuredFormations as any[]).map(f => normalizeUrl(f.imageUrl)).filter(Boolean) as string[])
   if (data.featuredEvents) collected.push(...(data.featuredEvents as any[]).map(e => normalizeUrl(e.coverImage)).filter(Boolean) as string[])
+  // add images from other collections
+  if (media.formationImages) collected.push(...(media.formationImages as any[]).map((i: any) => normalizeUrl(i.url)).filter(Boolean) as string[])
+  if (media.actualiteCovers) collected.push(...(media.actualiteCovers as any[]).map((i: any) => normalizeUrl(i.url)).filter(Boolean) as string[])
+  if (media.actualiteGalleries) collected.push(...(media.actualiteGalleries as any[]).flatMap((g: any) => (g.urls || []).map((u: any) => normalizeUrl(u))).filter(Boolean) as string[])
+  if (media.appelImages) collected.push(...(media.appelImages as any[]).map((i: any) => normalizeUrl(i.url)).filter(Boolean) as string[])
   // dédupliquer et garder les URLs valides
   const uniqueImages = Array.from(new Set(collected.filter(Boolean)))
 
