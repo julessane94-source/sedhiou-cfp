@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import ImageCarousel from '@/components/ImageCarousel'
 import ChatBotWrapper from '@/components/ChatBotWrapper'
+import VideoBand from '@/components/VideoBand'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -64,7 +65,13 @@ async function getAccueil() {
       featuredEvents[]->{ _id, title, excerpt, "slug": slug.current, "coverImage": coverImage.asset->url, publishedAt },
       featuredFormations[]->{ _id, title, description, "slug": slug.current, "imageUrl": image.asset->url },
       stats[]{ value, label },
-      bottomCta { text, link }
+      bottomCta { text, link },
+      "videoItems": *[_type == "actualite" && defined(videoUrl)] | order(publishedAt desc)[0..5] {
+        _id,
+        title,
+        videoUrl,
+        "coverImage": coverImage.asset->url
+      }
     }`
     const accueil = await client.fetch(query)
 
@@ -132,6 +139,26 @@ export default async function HomePage() {
   const directorSignature = normalizeUrl(data.directorMessage?.signature)
   const caiPhoto = normalizeUrl(data.caiMessage?.photo)
 
+  const heroVideo = data.hero?.videoUrl ? [{
+    id: 'hero-video',
+    title: data.hero.title || 'Vidéo de présentation',
+    url: normalizeUrl(data.hero.videoUrl) as string,
+    coverImage: undefined,
+    caption: 'Vidéo du hero'
+  }] : []
+
+  const actualiteVideos = (data.videoItems as any[] || [])
+    .map((item) => ({
+      id: item._id,
+      title: item.title || 'Vidéo d’actualité',
+      url: normalizeUrl(item.videoUrl) as string,
+      coverImage: normalizeUrl(item.coverImage),
+      caption: 'Actualité'
+    }))
+    .filter((item) => Boolean(item.url))
+
+  const videos = [...heroVideo, ...actualiteVideos]
+
   // Afficher le diaporama en priorité, sauf si vidéo YouTube valide
   const showVideo = Boolean(embedUrl)
   const showCarousel = carouselImages.length > 0
@@ -158,6 +185,8 @@ export default async function HomePage() {
           <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center"><div className="w-1 h-2 bg-white rounded-full mt-2"></div></div>
         </div>
       </section>
+
+      {videos.length > 0 && <VideoBand videos={videos} />}
 
       {/* Messages Directeur / CAI */}
       <div className="py-20 px-4 bg-[#d6bfbb]">
