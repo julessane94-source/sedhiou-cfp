@@ -250,42 +250,46 @@ export default function TidianyChat() {
 
   if (!isOpen) {
     return (
-      <button onClick={() => setIsOpen(true)} className="fixed bottom-6 right-6 z-50 bg-[#772a1d] text-white p-4 rounded-full shadow-lg hover:bg-[#5c2016] transition transform hover:scale-105">
+      <button onClick={() => setIsOpen(true)} className="fixed bottom-6 right-6 z-50 bg-[#10B981] text-white p-4 rounded-full shadow-lg hover:bg-[#059669] transition transform hover:scale-105" title="Assistant Tidiany">
         <MessageCircle size={28} />
       </button>
     )
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-96 h-[550px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-fade-in-up">
-      <div className="bg-[#772a1d] text-white px-4 py-3 flex justify-between items-center">
-        <div className="flex items-center gap-2"><MessageCircle size={20} /><span className="font-semibold">Tidiany - Assistant intelligent</span></div>
-        <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded"><X size={20} /></button>
+    <div className="fixed bottom-6 right-6 z-50 w-full max-w-sm h-[600px] sm:w-96 bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-fade-in-up">
+      <div className="bg-[#10B981] text-white px-4 py-3 flex justify-between items-center flex-shrink-0">
+        <div className="flex items-center gap-2"><MessageCircle size={20} /><span className="font-semibold">Tidiany - Assistant</span></div>
+        <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded transition" title="Fermer"><X size={20} /></button>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50 overflow-x-hidden">
         {messages.map((msg) => (
-          <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] px-4 py-2 rounded-2xl ${msg.sender === 'user' ? 'bg-[#772a1d] text-white rounded-br-none' : 'bg-white border border-gray-200 text-stone-800 rounded-bl-none shadow-sm'}`}>
+          <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} px-2`}>
+            <div className={`max-w-[85%] px-3 py-2 rounded-2xl break-words ${msg.sender === 'user' ? 'bg-[#10B981] text-white rounded-br-none' : 'bg-white border border-gray-200 text-stone-800 rounded-bl-none shadow-sm'}`}>
               <p className="text-sm whitespace-pre-line">{msg.text}</p>
               <p className="text-[10px] opacity-70 mt-1">{msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit' })}</p>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex justify-start">
+          <div className="flex justify-start px-2">
             <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-none px-4 py-2 shadow-sm">
-              <div className="flex gap-1"><span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span><span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span><span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span></div>
+              <div className="flex gap-1">
+                <span className="w-2 h-2 bg-[#10B981] rounded-full animate-bounce"></span>
+                <span className="w-2 h-2 bg-[#10B981] rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
+                <span className="w-2 h-2 bg-[#10B981] rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
+              </div>
             </div>
           </div>
         )}
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} className="h-2" />
       </div>
-      <div className="border-t p-3 bg-white">
-        <div className="flex gap-2">
-          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSend()} placeholder="Posez votre question..." className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#772a1d]" />
-          <button onClick={handleSend} disabled={isLoading} className="bg-[#772a1d] text-white p-2 rounded-full hover:bg-[#5c2016] transition disabled:opacity-50"><Send size={20} /></button>
-        </div>
+      <div className="border-t p-3 bg-white flex-shrink-0 flex gap-2">
+        <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSend()} placeholder="Posez votre question..." className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#10B981] text-sm" />
+        <button onClick={handleSend} disabled={isLoading} className="bg-[#10B981] text-white px-4 py-2 rounded-full hover:bg-[#059669] transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" title="Envoyer" aria-label="Envoyer">
+          <Send size={18} />
+        </button>
       </div>
     </div>
-  )
+  );
 }

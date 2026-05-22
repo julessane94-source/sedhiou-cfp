@@ -71,18 +71,36 @@ export default async function Footer() {
             <p className="text-sm text-stone-200 mt-1">Centre de Formation Professionnelle de Sédhiou</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            {icons.filter((icon) => icon.href).map((icon) => (
-              <a
-                key={icon.label}
-                href={icon.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={icon.label}
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
-              >
-                {icon.svg}
-              </a>
-            ))}
+            {icons.filter((icon) => icon.href).map((icon) => {
+              let bgColor = 'bg-white/10 hover:bg-white/20';
+              let textColor = 'text-white';
+              
+              if (icon.label === 'Facebook') {
+                bgColor = 'bg-[#1877F2] hover:bg-[#165ec5]';
+              } else if (icon.label === 'Instagram') {
+                bgColor = 'bg-gradient-to-r from-[#FE5743] to-[#E4405F] hover:from-[#E04630] hover:to-[#D1334D]';
+              } else if (icon.label === 'LinkedIn') {
+                bgColor = 'bg-[#0A66C2] hover:bg-[#084a94]';
+              } else if (icon.label === 'Twitter') {
+                bgColor = 'bg-[#000000] hover:bg-[#1a1a1a]';
+              } else if (icon.label === 'WhatsApp') {
+                bgColor = 'bg-[#25D366] hover:bg-[#1ea552]';
+              }
+              
+              return (
+                <a
+                  key={icon.label}
+                  href={icon.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={icon.label}
+                  className={`w-11 h-11 flex items-center justify-center rounded-full ${bgColor} ${textColor} transition transform hover:scale-110`}
+                  title={icon.label}
+                >
+                  {icon.svg}
+                </a>
+              );
+            })}
           </div>
           <div className="text-xs text-center lg:text-right text-stone-200">© {new Date().getFullYear()} Tous droits réservés</div>
         </div>
