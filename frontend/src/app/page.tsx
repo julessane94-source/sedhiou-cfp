@@ -61,12 +61,23 @@ export default async function HomePage() {
   const data = await getAccueil()
   if (!data) return <div className="pt-24 text-center">Chargement...</div>
 
-  const carouselImages = data.carouselImages?.map((img: any) => img.url) || []
-  if (data.heroImage && carouselImages.length === 0) carouselImages.push(data.heroImage)
+  // Rassembler toutes les images du site pour le diaporama
+  const collected: string[] = []
+  if (data.carouselImages) collected.push(...data.carouselImages.map((img: any) => img.url))
+  if (data.heroImage) collected.push(data.heroImage)
+  if (data.directorMessage?.image) collected.push(data.directorMessage.image)
+  if (data.caiMessage?.image) collected.push(data.caiMessage.image)
+  if (data.featuredFormations) collected.push(...(data.featuredFormations as any[]).map(f => f.imageUrl).filter(Boolean))
+  if (data.featuredEvents) collected.push(...(data.featuredEvents as any[]).map(e => e.coverImage).filter(Boolean))
+  // dédupliquer et garder les URLs valides
+  const uniqueImages = Array.from(new Set(collected.filter(Boolean)))
+
+  const carouselImages = uniqueImages
   const embedUrl = getEmbedUrl(data.videoUrl)
 
-  const showCarousel = carouselImages.length > 0
-  const showVideo = !showCarousel && embedUrl
+  // Préférer la vidéo si elle est fournie, sinon afficher le diaporama
+  const showVideo = Boolean(embedUrl)
+  const showCarousel = !showVideo && carouselImages.length > 0
 
   return (
     <div>
@@ -97,11 +108,16 @@ export default async function HomePage() {
           {data.directorMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.directorMessage.image && <img src={data.directorMessage.image} className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {data.directorMessage.image && <img src={data.directorMessage.image} alt="Directeur" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.directorMessage.title || 'Mot du Directeur'}</h2>
-                  <PortableText value={data.directorMessage.content} />
-                  {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
+                  <details className="bg-white/0 p-0">
+                    <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message du Directeur</summary>
+                    <div className="mt-4 text-stone-700">
+                      <PortableText value={data.directorMessage.content} />
+                      {data.directorMessage.signature && <p className="mt-4 italic text-stone-600">{data.directorMessage.signature}</p>}
+                    </div>
+                  </details>
                 </div>
               </div>
             </div>
@@ -109,11 +125,16 @@ export default async function HomePage() {
           {data.caiMessage?.content && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                {data.caiMessage.image && <img src={data.caiMessage.image} className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
+                {data.caiMessage.image && <img src={data.caiMessage.image} alt="Responsable CAI" className="w-32 h-32 rounded-full object-cover border-4 border-[#772a1d]" />}
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-3">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
-                  <PortableText value={data.caiMessage.content} />
-                  {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
+                  <details className="bg-white/0 p-0">
+                    <summary className="cursor-pointer inline-block bg-[#772a1d] text-white px-4 py-2 rounded-md">Lire le message de la Responsable CAI</summary>
+                    <div className="mt-4 text-stone-700">
+                      <PortableText value={data.caiMessage.content} />
+                      {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
+                    </div>
+                  </details>
                 </div>
               </div>
             </div>
