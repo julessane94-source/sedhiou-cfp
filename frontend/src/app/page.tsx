@@ -54,6 +54,28 @@ function Modal({ open, onClose, title, children }: any) {
   )
 }
 
+function normalizeVideoUrl(url: string | undefined) {
+  if (!url) return null
+  try {
+    if (url.includes('youtube.com/embed') || url.includes('youtube-nocookie.com/embed')) return url
+    const u = new URL(url)
+    if (u.hostname.includes('youtu.be')) {
+      const id = u.pathname.slice(1)
+      return `https://www.youtube-nocookie.com/embed/${id}`
+    }
+    if (u.hostname.includes('youtube.com')) {
+      const v = u.searchParams.get('v')
+      if (v) return `https://www.youtube-nocookie.com/embed/${v}`
+      const parts = u.pathname.split('/')
+      const idx = parts.indexOf('embed')
+      if (idx !== -1 && parts[idx + 1]) return `https://www.youtube-nocookie.com/embed/${parts[idx + 1]}`
+    }
+    return url
+  } catch (e) {
+    return url
+  }
+}
+
 async function getAccueil() {
   try {
     const res = await fetch('/api/accueil')
@@ -73,6 +95,7 @@ export default function HomePage() {
   const [data, setData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [showDirector, setShowDirector] = useState(false)
+  const [showCai, setShowCai] = useState(false)
 
   const load = async () => {
     setError(null)
@@ -111,7 +134,14 @@ export default function HomePage() {
         <div className="relative z-10 w-full flex justify-center px-4">
           {data.hero?.videoUrl ? (
             <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-2xl">
-              <iframe src={data.hero.videoUrl} className="w-full h-full" frameBorder="0" allowFullScreen />
+              <iframe
+                src={normalizeVideoUrl(data.hero.videoUrl)}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                title="Hero video"
+              />
             </div>
           ) : (
             <div className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl">
@@ -168,10 +198,17 @@ export default function HomePage() {
                 <img src={data.caiMessage.photo || '/images/avatar-placeholder.svg'} className="w-32 h-32 md:w-48 md:h-48 rounded-full object-cover border-4 border-[#772a1d] shadow-md" alt="Responsable CAI" />
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-stone-800 mb-2">{data.caiMessage.title || 'Mot de la responsable CAI'}</h2>
-                  <div className="prose prose-stone max-w-none"><PortableText value={data.caiMessage.content} /></div>
-                  {data.caiMessage.signature && <p className="mt-3 italic text-stone-600">{data.caiMessage.signature}</p>}
+                  <div className="prose prose-stone max-w-none line-clamp-3"><PortableText value={data.caiMessage.content} /></div>
+                  <div className="mt-4 flex items-center gap-4">
+                    <button onClick={() => setShowCai(true)} className="px-4 py-2 bg-[#772a1d] text-white rounded">Lire le mot du Responsable CAI</button>
+                    {data.caiMessage.signature && <span className="italic text-stone-600">{data.caiMessage.signature}</span>}
+                  </div>
                 </div>
               </div>
+              <Modal open={showCai} onClose={() => setShowCai(false)} title={data.caiMessage.title || 'Mot du responsable CAI'}>
+                <PortableText value={data.caiMessage.content} />
+                {data.caiMessage.signature && <p className="mt-4 italic text-stone-600">{data.caiMessage.signature}</p>}
+              </Modal>
             </div>
           )}
         </div>
